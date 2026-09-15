@@ -15,7 +15,7 @@ import { fetchSpatialGrid } from '../../api';
 const libraries: 'geometry'[] = ['geometry'];
 
 // Google Maps API Key from environment variable
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+const GOOGLE_MAPS_API_KEY: string = ((import.meta as any).env?.VITE_GOOGLE_MAPS_API_KEY as string) || '';
 
 const mapContainerStyle = {
   width: '100%',
