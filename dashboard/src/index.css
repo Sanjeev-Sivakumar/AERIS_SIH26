@@ -1,0 +1,543 @@
+@import 'leaflet/dist/leaflet.css';
+
+/* ==========================================================================
+   AERIS — Atmospheric Emission-Response Intelligence System Stylesheet
+   Design Standard: Calibri, clean, readable, institutional
+   ========================================================================== */
+
+:root {
+  --font-main: 'Calibri', 'Segoe UI', Candara, Arial, sans-serif;
+  --font-sans: 'Calibri', 'Segoe UI', Candara, Arial, sans-serif;
+  --font-mono: 'Calibri', Consolas, 'Roboto Mono', monospace;
+
+  /* Color System */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-subtle: #F1F5F9;
+  --border-color: #E2E8F0;
+  --border-subtle: #EDF2F7;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+
+  --link-color: #0284C7;
+  --link-hover: #0369A1;
+
+  /* Scientific Status & CPCB NAQI Categories */
+  --aqi-good: #16A34A;
+  --aqi-satisfactory: #65A30D;
+  --aqi-moderate: #EAB308;
+  --aqi-poor: #EA580C;
+  --aqi-very-poor: #DC2626;
+  --aqi-severe: #991B1B;
+}
+
+html {
+  font-size: 18px; /* Base 1rem = 18px (increased by 2 points from 16px default) */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+}
+
+body, button, input, select, textarea, table, th, td {
+  font-family: var(--font-main);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 15px; /* increased by 2 points from 13px */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Institutional Header */
+.portal-header {
+  background: #FFFFFF;
+  border-bottom: 2px solid #003366;
+  padding: 12px 24px 0 24px;
+}
+
+.portal-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.portal-title-block h1 {
+  font-size: 22px; /* increased by 2 points from 20px */
+  font-weight: bold;
+  color: #003366;
+  letter-spacing: 0.5px;
+}
+
+.portal-title-block .full-name {
+  font-size: 14px; /* increased by 2 points from 12px */
+  font-weight: 600;
+  color: #202122;
+  margin-top: 2px;
+}
+
+.portal-title-block .subtitle {
+  font-size: 13px; /* increased by 2 points from 11px */
+  color: #54595D;
+}
+
+.portal-meta-center {
+  text-align: center;
+  font-size: 14px; /* increased by 2 points from 12px */
+  color: #202122;
+}
+
+.portal-meta-center .domain-badge {
+  font-weight: bold;
+  color: #003366;
+  font-size: 15px; /* increased by 2 points from 13px */
+}
+
+.portal-meta-right {
+  text-align: right;
+  font-size: 13px; /* increased by 2 points from 11px */
+  color: #54595D;
+}
+
+.portal-meta-right .status-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+/* Main Navigation Bar */
+.portal-nav {
+  display: flex;
+  background: #FFFFFF;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.portal-nav-item {
+  padding: 10px 18px;
+  font-size: 15px; /* was 13px */
+  font-weight: 600;
+  color: #54595D;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  font-family: var(--font-main);
+}
+
+.portal-nav-item:hover {
+  color: #003366;
+  background: #F8F9FA;
+}
+
+.portal-nav-item.active {
+  color: #003366;
+  border-bottom: 3px solid #003366;
+  background: #F8F9FA;
+}
+
+/* Page Layout */
+.portal-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 24px 40px 24px;
+}
+
+.portal-section {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  padding: 16px 20px;
+}
+
+.portal-section-title {
+  font-size: 17px; /* was 15px */
+  font-weight: bold;
+  color: #003366;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.portal-section-subtitle {
+  font-size: 13px; /* was 11px */
+  font-weight: normal;
+  color: #54595D;
+}
+
+/* Government Institutional Tables */
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px; /* was 12px */
+  background: #FFFFFF;
+}
+
+.portal-table th {
+  background: #F5F6F7;
+  color: #202122;
+  font-weight: bold;
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+}
+
+.portal-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  color: #202122;
+}
+
+.portal-table tr:nth-child(even) {
+  background-color: #FAFAFA;
+}
+
+.portal-table tr:hover {
+  background-color: #F0F4F8;
+}
+
+.portal-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Provenance Tags */
+.prov-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 12px; /* was 10px */
+  font-weight: 600;
+  border: 1px solid #D9DDE1;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.prov-badge.observed {
+  background: #EBF5FF;
+  color: #1E429F;
+  border-color: #C3DDFD;
+}
+
+.prov-badge.modelled {
+  background: #F3F4F6;
+  color: #374151;
+  border-color: #D1D5DB;
+}
+
+.prov-badge.counterfactual {
+  background: #FDF2F8;
+  color: #9D174D;
+  border-color: #FBCFE8;
+}
+
+.prov-badge.forecast {
+  background: #FEF3C7;
+  color: #92400E;
+  border-color: #FDE68A;
+}
+
+/* Status Indicators */
+.status-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 13px; /* was 11px */
+  font-weight: bold;
+  border-radius: 2px;
+  color: #FFFFFF;
+}
+
+.status-good { background-color: var(--aqi-good); }
+.status-satisfactory { background-color: var(--aqi-satisfactory); }
+.status-moderate { background-color: var(--aqi-moderate); color: #202122; }
+.status-poor { background-color: var(--aqi-poor); }
+.status-very-poor { background-color: var(--aqi-very-poor); }
+.status-severe { background-color: var(--aqi-severe); }
+
+/* Buttons & Inputs */
+.portal-btn {
+  background: #003366;
+  color: #FFFFFF;
+  border: 1px solid #002244;
+  padding: 6px 14px;
+  font-size: 14px; /* was 12px */
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-main);
+}
+
+.portal-btn:hover {
+  background: #002244;
+}
+
+.portal-btn-secondary {
+  background: #FFFFFF;
+  color: #202122;
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  font-size: 14px; /* was 12px */
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-main);
+}
+
+.portal-btn-secondary:hover {
+  background: #F5F6F7;
+}
+
+.portal-select, .portal-input {
+  padding: 6px 10px;
+  font-size: 14px; /* was 12px */
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  background: #FFFFFF;
+  color: #202122;
+  font-family: var(--font-main);
+}
+
+/* Leaflet Container styling for Institutional Theme */
+.leaflet-container {
+  font-family: var(--font-main) !important;
+  background: #F5F6F7 !important;
+  border: 1px solid var(--border-color);
+}
+
+.leaflet-popup-content-wrapper {
+  background: #FFFFFF !important;
+  color: #202122 !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 3px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 10px 12px !important;
+  font-size: 14px !important; /* was 12px */
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* ==========================================================================
+   Advanced Atmospheric Heatmap & Interactive HUD Styling
+   ========================================================================== */
+
+@keyframes pulse-radar {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.radar-beacon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.radar-beacon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.4);
+  animation: pulse-radar 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.radar-beacon-dot {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #DC2626;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 0 6px rgba(220, 38, 38, 0.8);
+}
+
+.map-hud-card {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 51, 102, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 10px 14px;
+  min-width: 250px;
+  pointer-events: none;
+  transition: all 0.15s ease-out;
+}
+
+.map-legend-gradient-bar {
+  height: 12px;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #10B981 0%,
+    #84CC16 16.6%,
+    #F59E0B 33.3%,
+    #F97316 50%,
+    #EF4444 66.6%,
+    #991B1B 83.3%,
+    #450A0A 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  margin: 6px 0 4px 0;
+}
+
+.map-control-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 13px; /* was 11px */
+  font-weight: 600;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  background: #FFFFFF;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-control-chip:hover {
+  background: #F1F5F9;
+  border-color: #003366;
+}
+
+.map-control-chip.active {
+  background: #003366;
+  color: #FFFFFF;
+  border-color: #002244;
+}
+
+/* ==========================================================================
+   Cockpit Dashboard Grid (Table-like Structure, Visual-First Layout)
+   ========================================================================== */
+
+.cockpit-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1024px) {
+  .cockpit-grid {
+    grid-template-columns: 65% calc(35% - 16px);
+  }
+}
+
+.cockpit-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+.cockpit-card-header {
+  padding: 10px 16px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cockpit-card-title {
+  font-size: 15px; /* was 13px */
+  font-weight: 700;
+  color: #003366;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Visual Micro Progress Bar */
+.mini-meter-track {
+  width: 100%;
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mini-meter-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Status Pill with Pulsing Dot */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 13px; /* was 11px */
+  font-weight: 700;
+}
+
+.status-dot-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+
