@@ -406,7 +406,7 @@ You can clone the repository, run `sam local start-api`, and have the entire sys
 ## Explore the Project
 
 * **GitHub Repository**: [Sanjeev-Sivakumar/Environmental-hacks](https://github.com/Sanjeev-Sivakumar/Environmental-hacks)
-* **Master Video Walkthrough (1080p 60fps)**: [`final.mp4`](file:///d:/Projects/SIH%2026/SIH%2026/final.mp4)
+* **Master Video Walkthrough (1080p 60fps)**: [Watch on YouTube (youtu.be/Ic3iP61F6X8)](https://youtu.be/Ic3iP61F6X8)
 * **Standalone Voiceover Audio**: [`final_audio.mp3`](file:///d:/Projects/SIH%2026/SIH%2026/final_audio.mp3)
 * **Official Google Drive Proof & Benchmark Repository**: [AERIS Drive Proofs](https://drive.google.com/drive/folders/14wepK-b2KQ7AW8vIA-dW0N1DARpN011R?usp=sharing)
 * **SAM Architecture Template**: [`template.yaml`](file:///d:/Projects/SIH%2026/SIH%2026/template.yaml)
