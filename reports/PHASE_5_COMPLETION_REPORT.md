@@ -239,7 +239,7 @@ Provides visual side-by-side evidence:
 
 ## 17. Judge Walkthrough
 
-Built-in 8-step interactive demonstration tour covering the full SIH problem statement:
+Built-in 8-step interactive demonstration tour covering the full Bharat Builds problem statement:
 1. *What is happening?* (Severe AQI 385, trapped PM2.5).
 2. *Why is it happening?* (Nocturnal inversion lid & collapsing boundary layer).
 3. *Where is it coming from?* (NASA FIRMS stubble fire clusters + local transport).

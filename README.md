@@ -12,7 +12,7 @@
 
 **72-Hour Coupled Air Pollution–Weather Physical Rollouts, Planetary Boundary Layer Dynamics, and Constrained Model Predictive Control for Delhi NCR**
 
-*Built for Bharat Builds / SIH 2026 • 100% Hosted on Open-Source AWS Tooling with ₹0 Cloud Cost*
+*Built for Bharat Builds 2026 • 100% Hosted on Open-Source AWS Tooling with ₹0 Cloud Cost*
 
 [Official Proof Repository (Google Drive)](https://drive.google.com/drive/folders/14wepK-b2KQ7AW8vIA-dW0N1DARpN011R?usp=sharing) • [AWS Builder Center Blog](AERIS_AWS_Builder_Center_Blog.md)
 

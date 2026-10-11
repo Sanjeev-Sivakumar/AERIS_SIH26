@@ -2,7 +2,7 @@
 
 > **System Name:** **AERIS** (*Atmospheric Emission-Response Intelligence System*) / **SAMEER** (*Spectral Atmosphere-Mode Emulator for Emission Response*)  
 > **Problem Statement:** High-Resolution 72-Hour Air Pollution–Weather Coupled Forecasting & Decision Control Room for Delhi NCR  
-> **Target Audience:** Smart India Hackathon (SIH) Judges, Atmospheric Scientists, Technical Evaluators, Municipal Authorities (CPCB / DPCC / CAQM)
+> **Target Audience:** Bharat Builds Evaluators, Atmospheric Scientists, Technical Evaluators, Municipal Authorities (CPCB / DPCC / CAQM)
 
 ---
 

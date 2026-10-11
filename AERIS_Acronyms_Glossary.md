@@ -1,6 +1,6 @@
 # AERIS — System Acronyms & Terminology Glossary
 
-Comprehensive technical, atmospheric, and cloud computing glossary for the **AERIS (Atmospheric Emission-Response Intelligence System)** project, published for the Smart India Hackathon (SIH 2026) and AWS Builder Center.
+Comprehensive technical, atmospheric, and cloud computing glossary for the **AERIS (Atmospheric Emission-Response Intelligence System)** project, published for Bharat Builds 2026 and AWS Builder Center.
 
 ---
 
@@ -100,4 +100,4 @@ Comprehensive technical, atmospheric, and cloud computing glossary for the **AER
 
 ---
 
-*Compiled for the AERIS Project — Bharat Builds / SIH 2026.*
+*Compiled for the AERIS Project — Bharat Builds 2026.*

@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "phase": "Phase 3 (Physical Reduced-Order Dynamical Emulator)",
     "framework": "Dynamic Mode Decomposition with Control (DMDc) / Koopman Operator Theory",
-    "developer": "SAMEER Development Team (SIH)",
+    "developer": "AERIS Development Team (Bharat Builds)",
     "license": "Open Academic / Environmental Forecasting License",
     "date": "2023-11"
   },

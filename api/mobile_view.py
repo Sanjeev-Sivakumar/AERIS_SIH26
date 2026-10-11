@@ -386,7 +386,7 @@ MOBILE_HTML = """<!DOCTYPE html>
     </div>
 
     <div style="text-align: center; margin-top: 14px; font-size: 11px; color: #64748B;">
-      AERIS Clean Air Intelligence &bull; SIH 2026
+      AERIS Clean Air Intelligence &bull; Bharat Builds 2026
     </div>
   </div>
 

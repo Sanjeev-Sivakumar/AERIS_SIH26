@@ -4,7 +4,7 @@
 
 *By Sanjeev Kumar S & Team AERIS*  
 *Published for Bharat Builds / AWS Builder Center*  
-*Tags: `#serverless` `#aws-lambda` `#opensearch` `#amazon-dynamodb` `#ai`*
+*Tags: `#opensearch` `#opensource` `#ai` `#sustainability` `#python`*
 
 ---
 
@@ -338,11 +338,11 @@ On standard displays, five plume labels rendered at the exact same horizontal ti
 ## Explore the Project
 
 * **GitHub Repository**: [Sanjeev-Sivakumar/Environmental-hacks](https://github.com/Sanjeev-Sivakumar/Environmental-hacks)
-* **Master Video Walkthrough (1080p 60fps)**: [Watch on YouTube (youtu.be/Ic3iP61F6X8)](https://youtu.be/Ic3iP61F6X8)
-* **Standalone Voiceover Audio**: [`final_audio.mp3`](file:///d:/Projects/SIH%2026/SIH%2026/final_audio.mp3)
+* **Master Video Walkthrough (1080p 60fps)**: [Watch on YouTube](https://www.youtube.com/watch?v=2eyncrW-ESE)
+* **Standalone Voiceover Audio**: [Listen / Download on GitHub](https://github.com/Sanjeev-Sivakumar/Environmental-hacks/blob/main/final_audio.mp3)
 * **Official Google Drive Proof & Benchmark Repository**: [AERIS Drive Proofs](https://drive.google.com/drive/folders/14wepK-b2KQ7AW8vIA-dW0N1DARpN011R?usp=sharing)
-* **SAM Architecture Template**: [`template.yaml`](file:///d:/Projects/SIH%2026/SIH%2026/template.yaml)
-* **Cedar Municipal Policies**: [`policies/municipal_policy.cedar`](file:///d:/Projects/SIH%2026/SIH%2026/policies/municipal_policy.cedar)
+* **SAM Architecture Template**: [`template.yaml` on GitHub](https://github.com/Sanjeev-Sivakumar/Environmental-hacks/blob/main/template.yaml)
+* **Cedar Municipal Policies**: [`policies/municipal_policy.cedar` on GitHub](https://github.com/Sanjeev-Sivakumar/Environmental-hacks/blob/main/policies/municipal_policy.cedar)
 
 ---
 
@@ -351,4 +351,4 @@ On standard displays, five plume labels rendered at the exact same horizontal ti
 * **Independent Builder Disclaimer**: This article is published by independent student community builders (*Sanjeev Kumar S & Team AERIS*). This project is not affiliated with, sponsored by, or endorsed by Amazon Web Services, Inc. (AWS).
 * **Data Privacy**: All environmental telemetry, satellite hotspots, and meteorological inputs cited in this project originate from publicly accessible, anonymized open data repositories (CPCB, NASA FIRMS, ECMWF ERA5). No private credentials or proprietary employer data are included.
 
-*Built with passion for Bharat Builds / SIH 2026.*
+*Built with passion for Bharat Builds 2026.*
