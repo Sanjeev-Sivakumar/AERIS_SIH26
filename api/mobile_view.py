@@ -386,7 +386,7 @@ MOBILE_HTML = """<!DOCTYPE html>
     <div class="success-card" id="successCard">
       <div class="success-icon">&check;</div>
       <h2 style="font-size: 19px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">REGISTRATION SUCCESSFUL!</h2>
-      <p style="font-size: 13.5px; color: #D8F3DC; line-height: 1.5; margin-bottom: 16px;" id="successMsg">
+      <p style="font-size: 13.5px; color: #D8F3DC; line-height: 1.5; margin-bottom: 16px;" id="successNotice">
         Emergency air advisory email dispatched to your inbox.
       </p>
       <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px; font-size: 12px; color: #A7F3D0; text-align: left; margin-bottom: 16px;">
@@ -394,12 +394,24 @@ MOBILE_HTML = """<!DOCTYPE html>
         &bull; <strong>Danger Notice:</strong> Avoid Anand Vihar &amp; Jahangirpuri during morning inversion (05:00-09:30 AM)<br>
         &bull; <strong>Delivery:</strong> Real-time SMTP Broadcast
       </div>
-      <button onclick="window.location.reload()" style="background: #2D6A4F; border: none; color: #FFF; padding: 10px 20px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer;">
-        Register Another Device
-      </button>
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+        <button onclick="window.location.reload()" style="background: #2D6A4F; border: none; color: #FFF; padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
+          Register Another Device
+        </button>
+        <a href="/" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: #FFF; padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: 12.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <span>&#127760; Full Dashboard</span>
+        </a>
+      </div>
     </div>
 
-    <div style="text-align: center; margin-top: 14px; font-size: 11px; color: #64748B;">
+    <!-- Mobile Switch to Full Control Room Link -->
+    <div style="text-align: center; margin-top: 14px; margin-bottom: 10px;">
+      <a href="/" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); color: #D8F3DC; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 700; text-decoration: none; transition: background 0.2s;">
+        <span>&#127760; View Full Airshed Control Room</span>
+      </a>
+    </div>
+
+    <div style="text-align: center; margin-top: 10px; font-size: 11px; color: #64748B;">
       AERIS Clean Air Intelligence &bull; Bharat Builds 2026
     </div>
   </div>
@@ -477,14 +489,14 @@ MOBILE_HTML = """<!DOCTYPE html>
         document.getElementById('formCard').style.display = 'none';
         const sc = document.getElementById('successCard');
         sc.style.display = 'block';
-        document.getElementById('successMsg').innerHTML = 
+        document.getElementById('successNotice').innerHTML = 
           'Verified emergency advisory with <strong>Active Danger Corridors to Avoid</strong> has been successfully dispatched to <strong>' + email + '</strong>.';
       } catch (err) {
         // Fallback confirmation so the citizen never gets stranded
         document.getElementById('formCard').style.display = 'none';
         const sc = document.getElementById('successCard');
         sc.style.display = 'block';
-        document.getElementById('successMsg').innerHTML = 
+        document.getElementById('successNotice').innerHTML = 
           'Emergency registration recorded for <strong>' + email + '</strong>. Live alerts scheduled for dispatch.';
       }
     });

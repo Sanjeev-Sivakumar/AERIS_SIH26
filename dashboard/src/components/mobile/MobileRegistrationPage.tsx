@@ -7,8 +7,13 @@ import {
   Send,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw
+  RotateCcw,
+  Globe
 } from 'lucide-react';
+
+export interface MobileRegistrationPageProps {
+  onSwitchToDashboard?: () => void;
+}
 
 interface WardData {
   name: string;
@@ -95,7 +100,7 @@ const WARDS: Record<string, WardData> = {
   }
 };
 
-export const MobileRegistrationPage: React.FC = () => {
+export const MobileRegistrationPage: React.FC<MobileRegistrationPageProps> = ({ onSwitchToDashboard }) => {
   const [selectedWard, setSelectedWard] = useState<string>('anand_vihar');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -636,7 +641,37 @@ export const MobileRegistrationPage: React.FC = () => {
           </div>
         )}
 
-        <div style={{ textAlign: 'center', marginTop: '14px', fontSize: '11px', color: '#64748B' }}>
+        {/* Switch to Full Airshed Control Room Dashboard */}
+        <div style={{ textAlign: 'center', marginTop: '16px', marginBottom: '8px' }}>
+          <button
+            onClick={() => {
+              if (onSwitchToDashboard) {
+                onSwitchToDashboard();
+              } else {
+                window.location.href = '/';
+              }
+            }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              color: '#D8F3DC',
+              padding: '9px 18px',
+              borderRadius: '999px',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <Globe size={13} color="#52B788" />
+            <span>Open Full Airshed Control Room</span>
+          </button>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '11px', color: '#64748B' }}>
           AERIS Clean Air Intelligence &bull; Bharat Builds 2026
         </div>
       </div>

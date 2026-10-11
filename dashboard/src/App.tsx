@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, RefreshCw, CheckCircle2, FileCheck } from 'lucide-react';
+import { Download, RefreshCw, CheckCircle2, FileCheck, Smartphone } from 'lucide-react';
 import { GovernmentHeader } from './components/layout/GovernmentHeader';
 import { CurrentStateTiles } from './components/metrics/CurrentStateTiles';
 import { DelhiLeafletHeatmap } from './components/map/DelhiLeafletHeatmap';
@@ -47,14 +47,21 @@ import {
 } from './api';
 
 export const App: React.FC = () => {
-  // Check if route is mobile dynamic onboarding (/mobile or ?mobile=true)
-  const isMobilePortal = typeof window !== 'undefined' && (
-    window.location.pathname.startsWith('/mobile') ||
-    window.location.search.includes('mobile=true')
-  );
+  // View mode switcher: support /mobile route, ?mobile=true, and interactive switching
+  const [viewMode, setViewMode] = useState<'control_room' | 'mobile_portal'>(() => {
+    if (typeof window !== 'undefined') {
+      if (
+        window.location.pathname.startsWith('/mobile') ||
+        window.location.search.includes('mobile=true')
+      ) {
+        return 'mobile_portal';
+      }
+    }
+    return 'control_room';
+  });
 
-  if (isMobilePortal) {
-    return <MobileRegistrationPage />;
+  if (viewMode === 'mobile_portal') {
+    return <MobileRegistrationPage onSwitchToDashboard={() => setViewMode('control_room')} />;
   }
 
   const [currentPage, setCurrentPage] = useState<NavigationPage>('overview');
@@ -363,6 +370,23 @@ export const App: React.FC = () => {
             >
               <Download size={13} />
               <span>DOWNLOAD FORECAST CSV</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode('mobile_portal')}
+              className="air-btn-secondary"
+              style={{
+                padding: '6px 14px',
+                fontSize: '12px',
+                background: '#F0FDF4',
+                borderColor: '#BBF7D0',
+                color: '#166534',
+                fontWeight: 700
+              }}
+              title="Open Mobile Citizen Portal"
+            >
+              <Smartphone size={13} color="#16A34A" />
+              <span>MOBILE VIEW</span>
             </button>
 
             <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
