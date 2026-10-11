@@ -84,10 +84,14 @@ data/final/**
 
 # Large media, video, audio & scratch directories
 *.mp4
+*.mov
 *.webm
 *.avi
 *.mp3
 *.wav
+*.srt
+cover_image*.jpg
+aeris_cover_art.jpg
 artifacts_video/
 test_vid/
 scratch/
@@ -116,6 +120,8 @@ scripts/find_*hook*.py
 scripts/check_components_hooks.py
 scripts/inspect_timings.py
 scripts/calibrate_prabhat_timeline.py
+scripts/generate_srt.py
+scripts/transcribe_mov.py
 
 # OS generated
 .DS_Store
