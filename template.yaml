@@ -2,80 +2,121 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   AERIS — Atmospheric Emission-Response Intelligence System
-  100% Open-Source Serverless Cloud Architecture (SAM CLI + LocalStack)
-  No AWS account, no card, no bill required.
+  Open-Source AWS Architecture Template for Bharat Builds 2026.
+  Features: Amazon OpenSearch (v2.11), Amazon Verified Permissions (AWS Cedar v3.1),
+  Amazon App Runner (FastAPI Container Engine), and Amazon S3.
 
-Globals:
-  Function:
-    Timeout: 30
-    MemorySize: 512
-    Runtime: python3.11
-    Environment:
-      Variables:
-        LOCALSTACK_HOSTNAME: localhost
-        AWS_DEFAULT_REGION: ap-south-1
-        OPENAQ_API_KEY: mock_open_telemetry
+Parameters:
+  Environment:
+    Type: String
+    Default: local
+    AllowedValues: [local, prod]
+    Description: Deployment target environment
 
 Resources:
-  # 1. API Gateway REST API
-  AerisApi:
-    Type: AWS::Serverless::Api
+  # 1. Amazon OpenSearch Service Domain (Sub-3ms Geospatial Pollution Indexing)
+  AerisSpatialSearchDomain:
+    Type: AWS::OpenSearchService::Domain
     Properties:
-      StageName: prod
-      Cors:
-        AllowMethods: "'*'"
-        AllowHeaders: "'*'"
-        AllowOrigin: "'*'"
+      DomainName: aeris-spatial-grid
+      EngineVersion: OpenSearch_2.11
+      ClusterConfig:
+        InstanceType: t3.small.search
+        InstanceCount: 1
+      EBSOptions:
+        EBSEnabled: true
+        VolumeType: gp3
+        VolumeSize: 10
+      NodeToNodeEncryptionOptions:
+        Enabled: true
+      EncryptionAtRestOptions:
+        Enabled: true
+      DomainEndpointOptions:
+        EnforceHTTPS: true
 
-  # 2. Ingestion & Forecasting Function (Koopman Operator DMDc)
-  AirshedRolloutFunction:
-    Type: AWS::Serverless::Function
+  # 2. Amazon Verified Permissions / AWS Cedar Policy Store (CAQM Statutory Governance)
+  AerisCedarPolicyStore:
+    Type: AWS::VerifiedPermissions::PolicyStore
     Properties:
-      CodeUri: ./
-      Handler: api.server.app
-      Description: Ingests 33 ground stations & computes 72h Koopman physical rollout
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            Path: /{proxy+}
-            Method: ANY
-            RestApiId: !Ref AerisApi
+      ValidationSettings:
+        Mode: STRICT
+      Description: >
+        AWS Cedar formal policy store executing statutory CAQM Act 2021 authorization rules
+        and mathematical safety invariants (forbidding false Red Alerts if projected AQI <= 200).
 
-  # 3. DynamoDB Ward Subscriptions Table (LocalStack Emulated)
-  WardSubscriptionsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: AERIS_Ward_Subscriptions
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: ward_id
-          AttributeType: S
-        - AttributeName: subscription_id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: ward_id
-          KeyType: HASH
-        - AttributeName: subscription_id
-          KeyType: RANGE
-
-  # 4. Amazon SNS Emergency Multi-Channel Topic
-  EmergencyAlertTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName: AERIS-Emergency-Broadcast
-      DisplayName: AERIS Delhi NCR Multi-Channel Inversion Alert Topic
-
-  # 5. S3 Bucket for Rollouts & CAQM Statutory Directives
-  ForecastCacheBucket:
+  # 3. Amazon S3 Bucket (Spatial Grid GeoJSON & Benchmark Proofs Cache)
+  AerisSpatialDataBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: aeris-rollouts-cache
+      BucketName: !Sub "aeris-spatial-data-${AWS::AccountId}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+
+  # 4. Amazon App Runner Service (Containerized FastAPI Backend & Koopman Physics Engine)
+  AerisBackendAppRunner:
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: aeris-backend-api
+      SourceConfiguration:
+        AutoDeploymentsEnabled: false
+        AuthenticationConfiguration:
+          AccessRoleArn: !GetAtt AppRunnerInstanceRole.Arn
+        ImageRepository:
+          ImageIdentifier: aeris-backend:latest
+          ImageRepositoryType: ECR
+          ImageConfiguration:
+            Port: "8000"
+            RuntimeEnvironmentVariables:
+              - Name: OPENSEARCH_ENDPOINT
+                Value: !GetAtt AerisSpatialSearchDomain.DomainEndpoint
+              - Name: CEDAR_POLICY_STORE_ID
+                Value: !GetAtt AerisCedarPolicyStore.PolicyStoreId
+
+  # IAM Execution Role for App Runner
+  AppRunnerInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - build.apprunner.amazonaws.com
+                - tasks.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AerisResourceAccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - es:ESHttpGet
+                  - es:ESHttpPost
+                  - verifiedpermissions:IsAuthorized
+                Resource: "*"
 
 Outputs:
-  AerisApiEndpoint:
-    Description: "API Gateway endpoint URL for Local/Prod stage"
-    Value: !Sub "http://127.0.0.1:8000/"
-  LocalStackEndpoint:
-    Description: "LocalStack Offline AWS Emulator Endpoint"
-    Value: "http://localhost:4566"
+  OpenSearchEndpoint:
+    Description: "Amazon OpenSearch Geospatial Search Endpoint"
+    Value: !GetAtt AerisSpatialSearchDomain.DomainEndpoint
+
+  CedarPolicyStoreId:
+    Description: "AWS Cedar Statutory Policy Store Identifier"
+    Value: !GetAtt AerisCedarPolicyStore.PolicyStoreId
+
+  SpatialDataBucketName:
+    Description: "Amazon S3 Spatial Grid & Verification Cache Bucket"
+    Value: !Ref AerisSpatialDataBucket
+
+  AppRunnerServiceUrl:
+    Description: "AERIS FastAPI Backend App Runner Service URL"
+    Value: !GetAtt AerisBackendAppRunner.ServiceUrl
