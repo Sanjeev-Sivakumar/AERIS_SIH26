@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Download, RefreshCw, CheckCircle2, FileCheck } from 'lucide-react';
 import { GovernmentHeader } from './components/layout/GovernmentHeader';
 import { CurrentStateTiles } from './components/metrics/CurrentStateTiles';
 import { DelhiLeafletHeatmap } from './components/map/DelhiLeafletHeatmap';
@@ -11,6 +11,13 @@ import { GovernmentInterventionSection } from './components/intervention/Governm
 import { GovernmentModelSection } from './components/model/GovernmentModelSection';
 import { CurrentObservationsTable } from './components/monitoring/CurrentObservationsTable';
 import { MapErrorBoundary } from './components/map/MapErrorBoundary';
+import { ActionWindowCard } from './components/atmosphere/ActionWindowCard';
+import { CAQMDirectiveModal } from './components/reports/CAQMDirectiveModal';
+import { EmergencyAlertRibbon } from './components/alerts/EmergencyAlertRibbon';
+import { QRCodeEnrollModal } from './components/alerts/QRCodeEnrollModal';
+import { InteractiveBroadcastModal } from './components/alerts/InteractiveBroadcastModal';
+import { CitizenCommunityPortal } from './components/alerts/CitizenCommunityPortal';
+import { AWSInfrastructureDrawer } from './components/cloud/AWSInfrastructureDrawer';
 
 import {
   NavigationPage,
@@ -21,7 +28,8 @@ import {
   PlumeData,
   WhyAQIRisesData,
   MPCStrategyResult,
-  BackendActivity
+  BackendActivity,
+  ActiveAlertsResponse
 } from './types';
 
 import {
@@ -33,7 +41,8 @@ import {
   fetchWhyAQIRises,
   optimizeMPC,
   fetchActivity,
-  fetchStations
+  fetchStations,
+  fetchActiveAlerts
 } from './api';
 
 export const App: React.FC = () => {
@@ -47,9 +56,13 @@ export const App: React.FC = () => {
   const [mpcResult, setMpcResult] = useState<MPCStrategyResult | null>(null);
   const [activity, setActivity] = useState<BackendActivity | null>(null);
   const [stations, setStations] = useState<any[]>([]);
+  const [alertsData, setAlertsData] = useState<ActiveAlertsResponse | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [lastRefreshed, setLastRefreshed] = useState<string>('Just now');
+  const [showCAQMModal, setShowCAQMModal] = useState<boolean>(false);
+  const [showQRModal, setShowQRModal] = useState<boolean>(false);
+  const [showBroadcastModal, setShowBroadcastModal] = useState<boolean>(false);
 
   // Dynamic 72-Hour Timeline Simulation State
   const [timeStep, setTimeStep] = useState<number>(0);
@@ -69,7 +82,7 @@ export const App: React.FC = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [h, s, f, a, p, w, m, act, st] = await Promise.allSettled([
+      const [h, s, f, a, p, w, m, act, st, al] = await Promise.allSettled([
         fetchHealth(),
         fetchCurrentState(),
         fetchForecast(72),
@@ -78,7 +91,8 @@ export const App: React.FC = () => {
         fetchWhyAQIRises(),
         optimizeMPC('BALANCED', 24),
         fetchActivity(),
-        fetchStations()
+        fetchStations(),
+        fetchActiveAlerts()
       ]);
 
       if (h.status === 'fulfilled') setHealth(h.value);
@@ -90,6 +104,7 @@ export const App: React.FC = () => {
       if (m.status === 'fulfilled') setMpcResult(m.value);
       if (act.status === 'fulfilled') setActivity(act.value);
       if (st.status === 'fulfilled') setStations(st.value?.stations || []);
+      if (al.status === 'fulfilled') setAlertsData(al.value);
 
       const now = new Date();
       setLastRefreshed(now.toLocaleTimeString());
@@ -105,6 +120,7 @@ export const App: React.FC = () => {
     const interval = setInterval(() => {
       fetchCurrentState().then(setCurrentState).catch(() => {});
       fetchActivity().then(setActivity).catch(() => {});
+      fetchActiveAlerts().then(setAlertsData).catch(() => {});
     }, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -237,7 +253,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#F8F9FA' }}>
+    <div className="air-ambient-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* 0. Real-Time Emergency Alert Ribbon (Atmospheric Inversion Warning & Citizen Actions) */}
+      <EmergencyAlertRibbon
+        alertsData={alertsData}
+        onOpenBroadcastModal={() => setShowBroadcastModal(true)}
+        onOpenQRModal={() => setShowQRModal(true)}
+        onNavigateToCitizen={() => setCurrentPage('alerts')}
+      />
+
       {/* 1. Official Institutional Header with Clearly Organized Navbar */}
       <GovernmentHeader
         currentPage={currentPage}
@@ -248,88 +272,112 @@ export const App: React.FC = () => {
       />
 
       {/* 2. Sub-Header Utility Strip with On-Demand Download Option */}
-      <div
-        style={{
-          background: '#FFFFFF',
-          borderBottom: '1px solid var(--border-color)',
-          padding: '10px 24px',
-          fontSize: '13px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          color: 'var(--text-secondary)'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span>Active View: </span>
-          <strong style={{ color: '#003366', textTransform: 'uppercase' }}>
-            {currentPage === 'overview'
-              ? 'DELHI MAP & HEATMAP'
-              : currentPage === 'forecast'
-              ? '72-HOUR FORECAST'
-              : currentPage === 'atmosphere'
-              ? 'COUPLED FEEDBACK & INVERSION'
-              : currentPage === 'sources'
-              ? 'SOURCES & PLUMES'
-              : currentPage === 'intervention'
-              ? 'INTERVENTION & MPC'
-              : currentPage === 'monitoring'
-              ? 'STATIONS & DATA RECOVERY'
-              : 'MODEL SPECIFICATIONS'}
-          </strong>
-          <span style={{ margin: '0 4px' }}>|</span>
-          <span>Simulation Step: </span>
-          <strong style={{ color: '#0284C7', fontFamily: 'monospace' }}>
-            +{timeStep}h {timeStep === 0 ? '(Current Time)' : `(Day ${Math.floor(timeStep / 24) + 1})`}
-          </strong>
-          <span style={{ margin: '0 4px' }}>|</span>
-          <span>Airshed: <strong>Delhi NCR (3-km D03 WRF-Chem Grid)</strong></span>
-        </div>
+      {/* 2. Sub-Control Strip (Clean Symmetrical Layout) */}
+      <div style={{ background: '#FFFFFF', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div
+          style={{
+            maxWidth: '1720px',
+            margin: '0 auto',
+            padding: '10px 32px',
+            fontSize: '13px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+            color: 'var(--text-secondary)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Section:</span>
+            <span
+              style={{
+                color: '#1B4332',
+                fontWeight: 800,
+                fontSize: '12px',
+                background: '#E8F5E9',
+                padding: '3px 10px',
+                borderRadius: '6px',
+                border: '1px solid #C8E6C9',
+                letterSpacing: '0.3px'
+              }}
+            >
+              {currentPage === 'overview'
+                ? 'DELHI MAP & HEATMAP'
+                : currentPage === 'alerts'
+                ? 'CITIZEN ALERTS & SCHOOL SAFETY'
+                : currentPage === 'forecast'
+                ? '72-HOUR FORECAST'
+                : currentPage === 'atmosphere'
+                ? 'COUPLED FEEDBACK & INVERSION'
+                : currentPage === 'sources'
+                ? 'SOURCES & PLUMES'
+                : currentPage === 'intervention'
+                ? 'INTERVENTION & MPC'
+                : currentPage === 'monitoring'
+                ? 'STATIONS & DATA RECOVERY'
+                : currentPage === 'aws'
+                ? 'AWS CLOUD ARCHITECTURE & TELEMETRY'
+                : 'MODEL SPECIFICATIONS'}
+            </span>
+            <span style={{ margin: '0 4px', color: 'var(--border-light)' }}>|</span>
+            <span>Simulation Step: </span>
+            <strong style={{ color: '#2D6A4F', fontFamily: 'var(--font-mono)' }}>
+              +{timeStep}h {timeStep === 0 ? '(Current Time)' : `(Day ${Math.floor(timeStep / 24) + 1})`}
+            </strong>
+            <span style={{ margin: '0 4px', color: 'var(--border-light)' }}>|</span>
+            <span>Airshed: <strong>Delhi NCR (3-km D03 WRF-Chem Grid)</strong></span>
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            onClick={handleDownloadForecast}
-            className="portal-btn-secondary"
-            style={{
-              padding: '5px 12px',
-              fontSize: '12.5px',
-              fontWeight: 700,
-              color: '#15803D',
-              borderColor: '#86EFAC',
-              background: '#F0FDF4',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Download size={13} />
-            <span>DOWNLOAD FORECAST CSV</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              onClick={() => setShowCAQMModal(true)}
+              className="air-btn-primary"
+              style={{
+                padding: '6px 14px',
+                fontSize: '12px'
+              }}
+            >
+              <FileCheck size={13} />
+              <span>GENERATE CAQM DIRECTIVE</span>
+            </button>
 
-          <span>Refreshed: <strong>{lastRefreshed}</strong></span>
+            <button
+              onClick={handleDownloadForecast}
+              className="air-btn-secondary"
+              style={{
+                padding: '6px 14px',
+                fontSize: '12px'
+              }}
+            >
+              <Download size={13} />
+              <span>DOWNLOAD FORECAST CSV</span>
+            </button>
 
-          <button
-            onClick={loadData}
-            disabled={loading}
-            className="portal-btn-secondary"
-            style={{
-              padding: '5px 12px',
-              fontSize: '12.5px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-            <span>{loading ? 'SYNCING...' : 'SYNC DATA'}</span>
-          </button>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+              Refreshed: <strong style={{ color: 'var(--forest-900)' }}>{lastRefreshed}</strong>
+            </span>
+
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="air-btn-secondary"
+              style={{
+                padding: '6px 14px',
+                fontSize: '12px'
+              }}
+            >
+              <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+              <span>{loading ? 'SYNCING...' : 'SYNC DATA'}</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* 3. Main Portal View (Clean Navbar-Based Separation) */}
-      <main className="portal-container" style={{ flex: 1, padding: '20px 24px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      {/* 3. Main Portal View (Clean Airy Separation) */}
+      <main className="portal-container" style={{ flex: 1, padding: '24px 32px', maxWidth: '1720px', margin: '0 auto', width: '100%' }}>
         
-        {/* TAB 1: 🗺️ DELHI MAP & SMOOTH HEATMAP (Primary Focused View) */}
+        {/* TAB 1: DELHI MAP & SMOOTH HEATMAP (Primary Focused View) */}
         {currentPage === 'overview' && (
           <div>
             {/* Top Metric Tiles */}
@@ -349,7 +397,7 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 2: 📈 72-HOUR FORECAST TRAJECTORY */}
+        {/* TAB 2: 72-HOUR FORECAST TRAJECTORY */}
         {currentPage === 'forecast' && (
           <div>
             <CurrentStateTiles state={dynamicState} />
@@ -357,35 +405,38 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 3: 🔄 COUPLED FEEDBACK & ATMOSPHERIC INVERSION */}
+        {/* TAB 3: COUPLED FEEDBACK & ATMOSPHERIC INVERSION */}
         {currentPage === 'atmosphere' && (
           <div>
             <CurrentStateTiles state={dynamicState} />
+            <div style={{ marginBottom: '16px' }}>
+              <ActionWindowCard />
+            </div>
             <CoupledFeedbackVisualizer forecast={forecast} currentHour={timeStep} />
             <GovernmentAtmosphereSection state={dynamicState} forecast={forecast} />
           </div>
         )}
 
-        {/* TAB 4: 🛰️ SOURCES & REGIONAL PLUME CLOCK */}
+        {/* TAB 4: SOURCES & REGIONAL PLUME CLOCK */}
         {currentPage === 'sources' && (
           <div>
             <GovernmentSourcesSection attribution={attribution} plumes={plumes} whyData={whyData} />
           </div>
         )}
 
-        {/* TAB 5: 🎯 INTERVENTION & MPC POLICY OPTIMIZATION */}
+        {/* TAB 5: INTERVENTION & MPC POLICY OPTIMIZATION */}
         {currentPage === 'intervention' && (
           <div>
             <GovernmentInterventionSection initialMpcResult={mpcResult} />
           </div>
         )}
 
-        {/* TAB 6: 📊 STATIONS & DATA EXPORT / RECOVERY */}
+        {/* TAB 6: STATIONS & DATA EXPORT / RECOVERY */}
         {currentPage === 'monitoring' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#003366', margin: 0 }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--forest-900)', margin: 0 }}>
                   GROUND OBSERVATION RECEPTORS & RECOVERY DATA
                 </h2>
                 <span style={{ fontSize: '12px', color: '#64748B' }}>
@@ -457,54 +508,57 @@ export const App: React.FC = () => {
                     <span>100% REAL-TIME TELEMETRY (CPCB / DPCC / IMD)</span>
                   </span>
                 </div>
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <div className="table-responsive">
+                  <table className="portal-table">
                     <thead>
-                      <tr style={{ background: '#F1F5F9', borderBottom: '2px solid #CBD5E1', textAlign: 'left', color: '#334155' }}>
-                        <th style={{ padding: '8px 10px' }}>Station Name</th>
-                        <th style={{ padding: '8px 10px' }}>Coordinates</th>
-                        <th style={{ padding: '8px 10px' }}>PM2.5</th>
-                        <th style={{ padding: '8px 10px' }}>PM10</th>
-                        <th style={{ padding: '8px 10px' }}>NO2</th>
-                        <th style={{ padding: '8px 10px' }}>CO</th>
-                        <th style={{ padding: '8px 10px' }}>O3</th>
-                        <th style={{ padding: '8px 10px' }}>Calculated NAQI</th>
-                        <th style={{ padding: '8px 10px' }}>Category</th>
-                        <th style={{ padding: '8px 10px' }}>Status</th>
+                      <tr>
+                        <th style={{ width: '22%' }}>Station Name</th>
+                        <th style={{ width: '16%' }}>Coordinates</th>
+                        <th className="num" style={{ width: '10%' }}>PM2.5</th>
+                        <th className="num" style={{ width: '10%' }}>PM10</th>
+                        <th className="num" style={{ width: '8%' }}>NO2</th>
+                        <th className="num" style={{ width: '8%' }}>CO</th>
+                        <th className="num" style={{ width: '8%' }}>O3</th>
+                        <th className="num" style={{ width: '10%' }}>Calculated NAQI</th>
+                        <th style={{ width: '10%' }}>Category</th>
+                        <th style={{ width: '10%' }}>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {stations.map((s, idx) => (
-                        <tr key={s.id || idx} style={{ borderBottom: '1px solid #E2E8F0', background: idx % 2 === 0 ? '#FFFFFF' : '#F8FAFC' }}>
-                          <td style={{ padding: '8px 10px', fontWeight: 700, color: '#003366' }}>{s.name}</td>
-                          <td style={{ padding: '8px 10px', fontFamily: 'monospace', color: '#64748B', fontSize: '11px' }}>
+                        <tr key={s.id || idx}>
+                          <td>
+                            <strong style={{ color: 'var(--forest-900)' }}>{s.name}</strong>
+                          </td>
+                          <td style={{ fontFamily: 'var(--font-mono)', color: '#64748B', fontSize: '11px' }}>
                             {s.latitude?.toFixed(4)}°N, {s.longitude?.toFixed(4)}°E
                           </td>
-                          <td style={{ padding: '8px 10px', fontWeight: 800, color: s.pm25 > 120 ? '#DC2626' : '#2563EB' }}>
+                          <td className="num" style={{ fontWeight: 800, color: s.pm25 > 120 ? '#DC2626' : '#2563EB' }}>
                             {s.pm25 !== null && s.pm25 !== undefined ? `${s.pm25} µg/m³` : '—'}
                           </td>
-                          <td style={{ padding: '8px 10px', fontWeight: 700 }}>
+                          <td className="num" style={{ fontWeight: 700 }}>
                             {s.pm10 !== null && s.pm10 !== undefined ? `${s.pm10} µg/m³` : '—'}
                           </td>
-                          <td style={{ padding: '8px 10px' }}>{s.no2 !== null && s.no2 !== undefined ? `${s.no2} ppb` : '—'}</td>
-                          <td style={{ padding: '8px 10px' }}>{s.co !== null && s.co !== undefined ? `${s.co}` : '—'}</td>
-                          <td style={{ padding: '8px 10px' }}>{s.o3 !== null && s.o3 !== undefined ? `${s.o3} ppb` : '—'}</td>
-                          <td style={{ padding: '8px 10px', fontWeight: 800, color: s.aqi > 300 ? '#DC2626' : s.aqi > 200 ? '#EA580C' : '#16A34A' }}>
+                          <td className="num">{s.no2 !== null && s.no2 !== undefined ? `${s.no2} ppb` : '—'}</td>
+                          <td className="num">{s.co !== null && s.co !== undefined ? `${s.co}` : '—'}</td>
+                          <td className="num">{s.o3 !== null && s.o3 !== undefined ? `${s.o3} ppb` : '—'}</td>
+                          <td className="num" style={{ fontWeight: 800, color: s.aqi > 300 ? '#DC2626' : s.aqi > 200 ? '#EA580C' : '#16A34A' }}>
                             {s.aqi}
                           </td>
-                          <td style={{ padding: '8px 10px' }}>
+                          <td>
                             <span style={{
                               background: s.aqi > 400 ? '#FEE2E2' : s.aqi > 300 ? '#FFEDD5' : s.aqi > 200 ? '#FEF3C7' : '#DCFCE7',
                               color: s.aqi > 400 ? '#991B1B' : s.aqi > 300 ? '#C2410C' : s.aqi > 200 ? '#B45309' : '#15803D',
-                              padding: '2px 6px',
-                              borderRadius: '4px',
+                              padding: '2px 8px',
+                              borderRadius: '999px',
                               fontWeight: 700,
-                              fontSize: '10px'
+                              fontSize: '11px',
+                              whiteSpace: 'nowrap'
                             }}>
                               {s.category?.toUpperCase() || 'MODERATE'}
                             </span>
                           </td>
-                          <td style={{ padding: '8px 10px' }}>
+                          <td>
                             <span
                               style={{
                                 color: '#16A34A',
@@ -512,7 +566,8 @@ export const App: React.FC = () => {
                                 fontSize: '11px',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '4px'
+                                gap: '4px',
+                                whiteSpace: 'nowrap'
                               }}
                             >
                               <CheckCircle2 size={12} color="#16A34A" /> LIVE ONLINE
@@ -623,7 +678,24 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {/* TAB 7: ⚙️ MATHEMATICAL MODEL AUDIT & SVD SPECIFICATIONS */}
+        {/* TAB 8: CITIZEN & COMMUNITY PORTAL (GAP 1) */}
+        {currentPage === 'alerts' && (
+          <div>
+            <CitizenCommunityPortal
+              onOpenBroadcastModal={() => setShowBroadcastModal(true)}
+              onOpenQRModal={() => setShowQRModal(true)}
+            />
+          </div>
+        )}
+
+        {/* TAB 9: AWS CLOUD ARCHITECTURE & TELEMETRY (GAP 2) */}
+        {currentPage === 'aws' && (
+          <div>
+            <AWSInfrastructureDrawer />
+          </div>
+        )}
+
+        {/* TAB 7: MATHEMATICAL MODEL AUDIT & SVD SPECIFICATIONS */}
         {currentPage === 'model' && (
           <div>
             <GovernmentModelSection health={health} />
@@ -656,10 +728,30 @@ export const App: React.FC = () => {
             <strong>AERIS</strong> — Atmospheric Emission-Response Intelligence System · Delhi NCR Airshed
           </div>
           <div>
-            Grid: <strong>3-km D03 WRF-Chem</strong> · Rollout: <strong>72 Hours</strong> · Two-Way Feedback: <strong>ACTIVE</strong>
+            Cloud: <strong>100% AWS Free Tier Compliant</strong> · Grid: <strong>3-km D03 WRF-Chem</strong> · Rollout: <strong>72 Hours</strong> · Two-Way Feedback: <strong>ACTIVE</strong>
           </div>
         </div>
       </footer>
+
+      {/* Official CAQM Evidentiary Directive Modal */}
+      <CAQMDirectiveModal
+        isOpen={showCAQMModal}
+        onClose={() => setShowCAQMModal(false)}
+      />
+
+      {/* Public Citizen QR Code Scanner & Enrollment Modal */}
+      <QRCodeEnrollModal
+        isOpen={showQRModal}
+        onClose={() => setShowQRModal(false)}
+        onNavigateToCitizen={() => setCurrentPage('alerts')}
+      />
+
+      {/* Interactive Rapid Multi-Channel Geo-Alert Dispatcher Modal */}
+      <InteractiveBroadcastModal
+        isOpen={showBroadcastModal}
+        onClose={() => setShowBroadcastModal(false)}
+        onAlertDispatched={loadData}
+      />
     </div>
   );
 };

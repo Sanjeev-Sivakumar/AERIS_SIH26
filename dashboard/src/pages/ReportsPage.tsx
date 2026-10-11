@@ -1,7 +1,10 @@
-import React from 'react';
-import { FileText, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { FileText, CheckCircle2, Printer, FileCheck, ShieldAlert } from 'lucide-react';
+import { CAQMDirectiveModal } from '../components/reports/CAQMDirectiveModal';
 
 export const ReportsPage: React.FC = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+
   const sources = [
     { name: 'NASA FIRMS', role: 'Satellite active fire detections (VIIRS/MODIS)', status: 'OBSERVED' },
     { name: 'ECMWF GFAS', role: 'Biomass burning emission fluxes and plume heights', status: 'OBSERVED' },
@@ -15,6 +18,52 @@ export const ReportsPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+      {/* Official CAQM Directive Generator Banner */}
+      <div
+        className="white-card"
+        style={{
+          padding: '20px 24px',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          color: '#ffffff',
+          border: '1px solid #38bdf8'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FileCheck size={20} color="#38bdf8" />
+              <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '0.02em' }}>
+                CAQM & SUPREME COURT EVIDENTIARY AFFIDAVIT GENERATOR
+              </h2>
+            </div>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '4px' }}>
+              Transforms coupled fluid dynamics, ground truth sensor baselines, and SLSQP optimal curtailments into a legally admissible, stamped regulatory action directive under Section 12 of the CAQM Act, 2021.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShowModal(true)}
+            style={{
+              background: 'linear-gradient(90deg, #0284c7 0%, #2563eb 100%)',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '10px 20px',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)'
+            }}
+          >
+            <Printer size={16} />
+            <span>GENERATE CAQM DIRECTIVE (PDF)</span>
+          </button>
+        </div>
+      </div>
+
       <div className="white-card" style={{ padding: '20px 24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
@@ -94,6 +143,12 @@ Phase 5 status: COMPLETE AND VERIFIED
 ================================================================================`}
         </pre>
       </div>
+
+      {/* CAQM Directive Modal */}
+      <CAQMDirectiveModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

@@ -4,8 +4,10 @@ WRF-Chem Coupled Output Extractor and Phase 1 Inversion Integration Engine
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 import numpy as np
-import pandas as pd
-import xarray as xr
+try:
+    import xarray as xr
+except ImportError:
+    xr = None
 
 from config.settings import settings
 from config.logging_config import get_logger, log_operation

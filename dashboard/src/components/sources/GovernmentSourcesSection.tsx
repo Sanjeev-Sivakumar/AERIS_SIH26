@@ -140,22 +140,23 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
       {/* Mandatory Attribution Notice */}
       <div
         style={{
-          background: '#F8F9FA',
-          borderLeft: '3px solid #003366',
-          padding: '8px 12px',
-          fontSize: '11px',
-          color: '#202122',
+          background: 'rgba(45, 106, 79, 0.05)',
+          borderLeft: '3px solid var(--forest-800)',
+          borderRadius: '4px',
+          padding: '10px 14px',
+          fontSize: '11.5px',
+          color: 'var(--text-primary)',
           marginBottom: '16px'
         }}
       >
-        <strong>SCIENTIFIC DISCLOSURE:</strong> Attribution results represent <em>modelled counterfactual sensitivity</em> (evaluating response upon zeroing out sector emissions in the forward model). They are not direct causal measurements of ground-truth apportionment.
+        <strong style={{ color: 'var(--forest-900)' }}>SCIENTIFIC DISCLOSURE:</strong> Attribution results represent <em>modelled counterfactual sensitivity</em> (evaluating response upon zeroing out sector emissions in the forward model). They are not direct causal measurements of ground-truth apportionment.
       </div>
 
       {/* Two Column Layout: Regional Sources + Sector Contribution */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '20px', marginBottom: '20px' }}>
         {/* Left: Regional Airshed Breakdown */}
-        <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF' }}>
-          <strong style={{ fontSize: '13px', color: '#003366', display: 'block', marginBottom: '10px' }}>
+        <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block', marginBottom: '10px' }}>
             REGIONAL AIRSHED CONTRIBUTION
           </strong>
           
@@ -164,8 +165,8 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
               <span>Local Urban Emissions (Delhi NCT)</span>
               <strong>{regional.local_urban_percent.toFixed(1)}%</strong>
             </div>
-            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '2px', overflow: 'hidden' }}>
-              <div style={{ width: `${Math.min(100, Math.max(0, regional.local_urban_percent))}%`, height: '100%', background: '#003366' }}></div>
+            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ width: `${Math.min(100, Math.max(0, regional.local_urban_percent))}%`, height: '100%', background: 'var(--forest-800)' }}></div>
             </div>
           </div>
 
@@ -174,7 +175,7 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
               <span>Regional Stubble / Biomass Burning (Upwind)</span>
               <strong style={{ color: '#DC2626' }}>{regional.regional_crop_fires_percent.toFixed(1)}%</strong>
             </div>
-            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ width: `${Math.min(100, Math.max(0, regional.regional_crop_fires_percent))}%`, height: '100%', background: '#DC2626' }}></div>
             </div>
           </div>
@@ -184,7 +185,7 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
               <span>Transboundary Regional Background</span>
               <strong>{regional.transboundary_background_percent.toFixed(1)}%</strong>
             </div>
-            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: '14px', background: '#EAECF0', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ width: `${Math.min(100, Math.max(0, regional.transboundary_background_percent))}%`, height: '100%', background: '#54595D' }}></div>
             </div>
           </div>
@@ -195,8 +196,8 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
         </div>
 
         {/* Right: Sectoral Counterfactual Sensitivity Bars & Table */}
-        <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF' }}>
-          <strong style={{ fontSize: '13px', color: '#003366', display: 'block', marginBottom: '10px' }}>
+        <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block', marginBottom: '10px' }}>
             MODELLED SECTORAL SENSITIVITY (ZERO-OUT REDUCTIONS)
           </strong>
 
@@ -214,7 +215,7 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
                 <tr key={idx}>
                   <td><strong>{s.sector}</strong></td>
                   <td className="num">{s.share_percent.toFixed(1)}%</td>
-                  <td className="num" style={{ color: '#003366', fontWeight: 'bold' }}>
+                  <td className="num" style={{ color: 'var(--forest-800)', fontWeight: 'bold' }}>
                     -{(s.pm25_reduction_ugm3 ?? s.zero_out_reduction_ugm3 ?? 0).toFixed(1)} µg/m³
                   </td>
                   <td>
@@ -228,9 +229,9 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
           </table>
 
           {/* Plotted Line & Bar Graph of Tabular Sector Contributions Directly Below */}
-          <div style={{ marginTop: '12px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '10px 12px', borderRadius: '4px' }}>
+          <div style={{ marginTop: '12px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '10px 12px', borderRadius: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '8px' }}>
-              <span style={{ fontWeight: 700, color: '#003366' }}>SECTORAL REDUCTION LEVER PROFILE</span>
+              <span style={{ fontWeight: 700, color: 'var(--forest-900)' }}>SECTORAL REDUCTION LEVER PROFILE</span>
               <span style={{ color: '#64748B' }}>ΔPM2.5 Potential per Sector (µg/m³)</span>
             </div>
             <svg viewBox="0 0 450 110" style={{ width: '100%', height: 'auto', display: 'block' }}>
@@ -303,9 +304,9 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
       </div>
 
       {/* WHY AQI RISES: RANKED PHYSICAL FORCINGS */}
-      <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF', marginBottom: '20px' }}>
+      <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)', marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <strong style={{ fontSize: '13px', color: '#003366' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)' }}>
             WHY AQI RISES — RANKED DEGRADATION MECHANISMS (PHYSICAL EXPLAINABILITY)
           </strong>
           <span className="prov-badge observed">SPECTRAL EIGENMODE CORRELATION</span>
@@ -325,7 +326,7 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
             {drivers.map((d, idx) => (
               <tr key={idx}>
                 <td><strong>0{d.rank || idx + 1}</strong></td>
-                <td><strong style={{ color: '#003366' }}>{d.name}</strong></td>
+                <td><strong style={{ color: 'var(--forest-900)' }}>{d.name}</strong></td>
                 <td className="num"><strong>{Number(d.impact_score).toFixed(1)} / 100</strong></td>
                 <td><code>{d.physical_variable}</code></td>
                 <td>
@@ -340,9 +341,9 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
         </table>
 
         {/* Visual Line & Bar Graph Plotting Ranked Mechanisms Directly Below Table */}
-        <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '12px 14px', borderRadius: '4px' }}>
+        <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '12px 14px', borderRadius: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '8px' }}>
-            <span style={{ fontWeight: 700, color: '#003366' }}>DEGRADATION FORCING IMPACT PROFILE</span>
+            <span style={{ fontWeight: 700, color: 'var(--forest-900)' }}>DEGRADATION FORCING IMPACT PROFILE</span>
             <span style={{ color: '#64748B' }}>Modeled Relative Severity Score (0 - 100)</span>
           </div>
           <svg viewBox="0 0 920 120" style={{ width: '100%', height: 'auto', display: 'block' }}>
@@ -360,11 +361,11 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
               return (
                 <g key={idx}>
                   {/* Stem line */}
-                  <line x1={x} y1="95" x2={x} y2={y} stroke="#003366" strokeWidth="2" />
+                  <line x1={x} y1="95" x2={x} y2={y} stroke="var(--forest-800)" strokeWidth="2" />
                   {/* Circular node */}
-                  <circle cx={x} cy={y} r="6" fill="#003366" stroke="#FFFFFF" strokeWidth="2" />
+                  <circle cx={x} cy={y} r="6" fill="var(--forest-800)" stroke="#FFFFFF" strokeWidth="2" />
                   {/* Score badge */}
-                  <text x={x} y={y - 8} fill="#003366" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                  <text x={x} y={y - 8} fill="var(--forest-800)" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                     {score.toFixed(1)}
                   </text>
                   {/* Name label */}
@@ -384,7 +385,7 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
                 return `${x},${y}`;
               }).join(' ')}
               fill="none"
-              stroke="#0284C7"
+              stroke="var(--forest-600)"
               strokeWidth="1.5"
               strokeDasharray="4 2"
             />
@@ -393,9 +394,9 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
       </div>
 
       {/* REGIONAL FIRE & BIOMASS TRANSPORT */}
-      <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF' }}>
+      <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-          <strong style={{ fontSize: '13px', color: '#003366' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)' }}>
             REGIONAL FIRE & BIOMASS TRANSPORT (NASA FIRMS SATELLITE TELEMETRY)
           </strong>
           <span className="prov-badge observed">OBSERVED SATELLITE DETECTIONS</span>
@@ -442,34 +443,43 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
         </table>
 
         {/* Visual Line & Dispersion Graph Plotting Regional Fire Hotspots Directly Below Table */}
-        <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '12px 14px', borderRadius: '4px' }}>
+        <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '12px 14px', borderRadius: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '8px' }}>
-            <span style={{ fontWeight: 700, color: '#003366' }}>REGIONAL ADVECTION TIMELINE & RADIATIVE POWER (FRP)</span>
+            <span style={{ fontWeight: 700, color: 'var(--forest-900)' }}>REGIONAL ADVECTION TIMELINE & RADIATIVE POWER (FRP)</span>
             <span style={{ color: '#64748B' }}>Plotted Transit Time (+Hours) vs Upwind Distance to Delhi Receptor</span>
           </div>
-          <svg viewBox="0 0 920 130" style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <line x1="50" y1="100" x2="880" y2="100" stroke="#CBD5E1" strokeWidth="1" />
+          <svg viewBox="0 0 920 180" style={{ width: '100%', height: 'auto', display: 'block' }}>
+            <line x1="50" y1="105" x2="880" y2="105" stroke="#CBD5E1" strokeWidth="1" />
             {fires.map((f, idx) => {
               const dist = f.distance_to_delhi_km ?? f.distance_km ?? (100 + idx * 50);
               const transit = f.estimated_arrival_hours ?? f.estimated_transit_hours ?? (10 + idx * 4);
               const frp = f.total_frp_mw ?? f.total_frp ?? 200;
-              const x = 80 + idx * (720 / Math.max(1, fires.length - 1));
-              const y = 100 - Math.min(80, Math.max(15, (frp / 400) * 80));
-              const radius = Math.min(18, Math.max(8, Math.sqrt(frp) * 0.9));
+              const x = 70 + idx * (780 / Math.max(1, fires.length - 1));
+              const y = 105 - Math.min(75, Math.max(18, (frp / 400) * 75));
+              const radius = Math.min(16, Math.max(7, Math.sqrt(frp) * 0.85));
 
               return (
                 <g key={idx}>
                   {/* Fire transit pulse bubble */}
                   <circle cx={x} cy={y} r={radius} fill="#EF4444" fillOpacity="0.25" stroke="#DC2626" strokeWidth="2" />
-                  <circle cx={x} cy={y} r={4} fill="#B91C1C" />
+                  <circle cx={x} cy={y} r={3.5} fill="#B91C1C" />
                   {/* Stem to baseline */}
-                  <line x1={x} y1="100" x2={x} y2={y + radius} stroke="#FCA5A5" strokeWidth="1" strokeDasharray="2 2" />
-                  {/* Labels */}
-                  <text x={x} y={y - radius - 4} fill="#DC2626" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                    {f.cluster_id}: {frp.toFixed(0)} MW
+                  <line x1={x} y1="105" x2={x} y2={y + radius} stroke="#FCA5A5" strokeWidth="1" strokeDasharray="2 2" />
+                  {/* Labels on top */}
+                  <text x={x} y={y - radius - 5} fill="#DC2626" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                    {f.cluster_id ? `${f.cluster_id}: ` : ''}{frp.toFixed(0)} MW
                   </text>
-                  <text x={x} y="113" fill="#475569" fontSize="9" fontWeight="600" textAnchor="middle">
-                    {dist.toFixed(0)} km upwind (+{transit.toFixed(0)}h transit)
+                  {/* Slanted bottom labels with textAnchor="end" to eliminate any horizontal collision */}
+                  <text
+                    x={x}
+                    y="118"
+                    fill="#334155"
+                    fontSize="8.5"
+                    fontWeight="600"
+                    textAnchor="end"
+                    transform={`rotate(-38, ${x}, 118)`}
+                  >
+                    {dist.toFixed(0)} km (+{transit.toFixed(0)}h)
                   </text>
                 </g>
               );
@@ -479,8 +489,8 @@ export const GovernmentSourcesSection: React.FC<GovernmentSourcesSectionProps> =
             <polyline
               points={fires.map((f, idx) => {
                 const frp = f.total_frp_mw ?? f.total_frp ?? 200;
-                const x = 80 + idx * (720 / Math.max(1, fires.length - 1));
-                const y = 100 - Math.min(80, Math.max(15, (frp / 400) * 80));
+                const x = 70 + idx * (780 / Math.max(1, fires.length - 1));
+                const y = 105 - Math.min(75, Math.max(18, (frp / 400) * 75));
                 return `${x},${y}`;
               }).join(' ')}
               fill="none"

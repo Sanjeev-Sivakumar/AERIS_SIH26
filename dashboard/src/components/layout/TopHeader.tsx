@@ -21,11 +21,13 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 }) => {
   const pageTitles: Record<NavigationPage, string> = {
     overview: 'Overview',
+    alerts: 'Citizen Alerts & Schools',
     monitoring: 'Monitoring',
     forecast: 'Forecast',
     atmosphere: 'Atmosphere',
     sources: 'Sources & Plume',
     intervention: 'Interventions',
+    aws: 'AWS Cloud Architecture',
     model: 'Model & Validation'
   };
 

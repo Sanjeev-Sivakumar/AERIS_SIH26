@@ -9,17 +9,7 @@ export const GovernmentForecastSection: React.FC<GovernmentForecastSectionProps>
   const [filterStep, setFilterStep] = useState<'all' | '6h' | '12h' | '24h'>('all');
   const [selectedParam, setSelectedParam] = useState<'aqi' | 'pm25' | 'pm10' | 'o3' | 'no2'>('aqi');
 
-  if (!forecast || !forecast.hourly_timeline || forecast.hourly_timeline.length === 0) {
-    return (
-      <div className="portal-section">
-        <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>
-          Loading 72-hour atmospheric ML forecast rollout...
-        </div>
-      </div>
-    );
-  }
-
-  const timeline = forecast.hourly_timeline;
+  const timeline = forecast?.hourly_timeline || [];
 
   // Debug output requirement: log full arrays and first/last 10 values for each parameter
   React.useEffect(() => {
@@ -42,6 +32,16 @@ export const GovernmentForecastSection: React.FC<GovernmentForecastSectionProps>
       console.log('First 10 AQI:', timeline.slice(0, 10).map(h => h.aqi), '... Last 10:', timeline.slice(-10).map(h => h.aqi));
     }
   }, [timeline]);
+
+  if (!forecast || !forecast.hourly_timeline || forecast.hourly_timeline.length === 0) {
+    return (
+      <div className="portal-section">
+        <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)' }}>
+          Loading 72-hour atmospheric ML forecast rollout...
+        </div>
+      </div>
+    );
+  }
 
   // Compute NAQI from PM2.5 for fallback/table
   const calcAqi = (pm: number) => {
@@ -153,22 +153,83 @@ export const GovernmentForecastSection: React.FC<GovernmentForecastSectionProps>
     return true;
   });
 
+  const paramLabels: Record<string, { label: string; unit: string; desc: string }> = {
+    aqi: { label: 'CPCB NAQI', unit: 'Index (0-500)', desc: 'National Air Quality Index' },
+    pm25: { label: 'PM2.5', unit: 'µg/m³', desc: 'Fine Respirable Particulates (<2.5 µm)' },
+    pm10: { label: 'PM10', unit: 'µg/m³', desc: 'Inhalable Coarse Particulates (<10 µm)' },
+    o3: { label: 'OZONE (O3)', unit: 'ppb', desc: 'Photochemical Surface Ozone' },
+    no2: { label: 'NO2', unit: 'ppb', desc: 'Combustion Nitrogen Dioxide' }
+  };
+
   return (
     <div className="portal-section">
-      <div className="portal-section-title">
-        <span>72-HOUR AIR QUALITY FORECAST — DELHI NCR AIRSHED</span>
-        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-          <span className="portal-section-subtitle">Parameter:</span>
-          {(['aqi', 'pm25', 'pm10', 'o3', 'no2'] as const).map((p) => (
-            <button
-              key={p}
-              onClick={() => setSelectedParam(p)}
-              className={selectedParam === p ? 'portal-btn' : 'portal-btn-secondary'}
-              style={{ padding: '2px 8px', fontSize: '11px', textTransform: 'uppercase' }}
+      <div className="portal-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <span>72-HOUR AIR QUALITY FORECAST — DELHI NCR AIRSHED</span>
+          <div style={{ marginTop: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#DCFCE7',
+                border: '1.5px solid #22C55E',
+                color: '#14532D',
+                padding: '3px 12px',
+                borderRadius: '999px',
+                fontSize: '11px',
+                fontWeight: 800,
+                boxShadow: '0 0 10px rgba(34, 197, 94, 0.35)'
+              }}
             >
-              {p === 'aqi' ? 'CPCB AQI' : p.toUpperCase()}
-            </button>
-          ))}
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16A34A', boxShadow: '0 0 6px #16A34A', display: 'inline-block' }} />
+              ACTIVE GRAPH: {paramLabels[selectedParam]?.label} ({paramLabels[selectedParam]?.unit})
+            </span>
+            <span style={{ fontSize: '11px', color: '#64748B' }}>
+              {paramLabels[selectedParam]?.desc}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <span className="portal-section-subtitle" style={{ fontWeight: 700, color: '#334155' }}>SWITCH PARAMETER:</span>
+          {(['aqi', 'pm25', 'pm10', 'o3', 'no2'] as const).map((p) => {
+            const isActive = selectedParam === p;
+            return (
+              <button
+                key={p}
+                onClick={() => setSelectedParam(p)}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '11px',
+                  fontWeight: isActive ? 800 : 600,
+                  textTransform: 'uppercase',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: isActive ? 'linear-gradient(135deg, #15803D 0%, #166534 100%)' : '#F1F5F9',
+                  color: isActive ? '#FFFFFF' : '#334155',
+                  border: isActive ? '1.5px solid #22C55E' : '1px solid #CBD5E1',
+                  boxShadow: isActive ? '0 0 12px rgba(34, 197, 94, 0.45)' : 'none',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: isActive ? '#4ADE80' : '#94A3B8',
+                    boxShadow: isActive ? '0 0 6px #4ADE80' : 'none',
+                    display: 'inline-block'
+                  }}
+                />
+                {p === 'aqi' ? 'CPCB AQI' : p.toUpperCase()}
+              </button>
+            );
+          })}
         </div>
       </div>
 

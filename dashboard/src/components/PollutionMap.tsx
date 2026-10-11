@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Map, Layers, Play, Pause, Flame, Wind, Eye, Compass } from 'lucide-react';
+import { Map, Layers, Play, Pause, Flame, Wind, Eye, Compass, X } from 'lucide-react';
 import { SpatialGridData, PlumeData, PlumeEstimate } from '../types';
 import { fetchSpatialGrid } from '../api';
 
@@ -287,9 +287,10 @@ export const PollutionMap: React.FC<PollutionMapProps> = ({ plumes }) => {
               <span style={{ color: '#fbbf24', fontWeight: 600 }}>Est. Arrival: +{selectedFire.estimated_arrival_hours}h</span>
               <button
                 onClick={() => setSelectedFire(null)}
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.8rem' }}
+                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                title="Close"
               >
-                ✕
+                <X size={14} />
               </button>
             </div>
           </div>

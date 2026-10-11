@@ -1,6 +1,7 @@
 import React from 'react';
 import { CloudSun, Layers, Thermometer, Wind } from 'lucide-react';
 import { CleanAtmosphericState } from '../components/atmosphere/CleanAtmosphericState';
+import { ActionWindowCard } from '../components/atmosphere/ActionWindowCard';
 import { CurrentState } from '../types';
 
 interface AtmospherePageProps {
@@ -29,6 +30,9 @@ export const AtmospherePage: React.FC<AtmospherePageProps> = ({ state }) => {
           <span className="provenance-tag modelled">MODELLED</span>
         </div>
       </div>
+
+      {/* Atmospheric Action Window Countdown */}
+      <ActionWindowCard />
 
       <CleanAtmosphericState state={state} />
 

@@ -3,9 +3,10 @@ WRF-Chem Coupled Workflow Orchestrator and Simulation Replay Engine
 """
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-import numpy as np
-import pandas as pd
-import xarray as xr
+try:
+    import xarray as xr
+except ImportError:
+    xr = None
 
 from config.settings import settings
 from config.logging_config import get_logger, log_operation

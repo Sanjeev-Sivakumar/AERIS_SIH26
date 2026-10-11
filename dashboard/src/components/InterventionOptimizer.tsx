@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Sliders, CheckCircle2, XCircle, Zap, ShieldCheck, DollarSign, AlertTriangle } from 'lucide-react';
+import { Sliders, CheckCircle2, XCircle, Zap, ShieldCheck, DollarSign, AlertTriangle, FileText } from 'lucide-react';
 import { MPCStrategyResult } from '../types';
 import { optimizeMPC } from '../api';
+import { InfeasibilityCertificateModal } from './intervention/InfeasibilityCertificateModal';
 
 interface InterventionOptimizerProps {
   onStrategyChange: (result: MPCStrategyResult) => void;
@@ -16,6 +17,7 @@ export const InterventionOptimizer: React.FC<InterventionOptimizerProps> = ({
   const [targetAqi, setTargetAqi] = useState<number>(250);
   const [useTargetMode, setUseTargetMode] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showInfeasibilityModal, setShowInfeasibilityModal] = useState<boolean>(false);
 
   const handleRunOptimization = async (strat = strategy, targetVal?: number) => {
     setLoading(true);
@@ -165,6 +167,28 @@ export const InterventionOptimizer: React.FC<InterventionOptimizerProps> = ({
                 ? `Ramp rates (-30%/h) and max curtailment limits (60%) strictly satisfied. Expected PM2.5 reduction: -${result?.expected_pm25_reduction_ugm3?.toFixed(1) || '45.2'} µg/m³.`
                 : (result?.infeasibility_reason || 'Target unachievable under bounded ramp limits without violating societal operation constraints.')}
             </p>
+            {(!isFeasible || result?.infeasibility_certificate) && (
+              <button
+                onClick={() => setShowInfeasibilityModal(true)}
+                style={{
+                  marginTop: '8px',
+                  background: '#dc2626',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '5px 12px',
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <FileText size={12} />
+                <span>VIEW PHYSICAL INFEASIBILITY PROOF</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -212,6 +236,13 @@ export const InterventionOptimizer: React.FC<InterventionOptimizerProps> = ({
           * Disclaimer: Intervention outcomes represent optimal model response under linear DMDc dynamics. Physical real-world response depends on meteorological coupling and enforcement fidelity.
         </div>
       </div>
+
+      {/* Infeasibility Certificate Modal */}
+      <InfeasibilityCertificateModal
+        isOpen={showInfeasibilityModal}
+        onClose={() => setShowInfeasibilityModal(false)}
+        certificate={result?.infeasibility_certificate || null}
+      />
     </div>
   );
 };

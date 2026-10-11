@@ -75,7 +75,7 @@ export const GovernmentAtmosphereSection: React.FC<GovernmentAtmosphereSectionPr
         </div>
         <div style={{ background: '#F8F9FA', border: '1px solid var(--border-color)', padding: '10px 14px' }}>
           <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Surface Wind & Pressure</div>
-          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#003366' }}>{state.wind_speed_10m.toFixed(1)} m/s</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--forest-900)' }}>{state.wind_speed_10m.toFixed(1)} m/s</div>
           <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>1014.2 hPa · RH: {state.relative_humidity.toFixed(0)}%</div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export const GovernmentAtmosphereSection: React.FC<GovernmentAtmosphereSectionPr
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', alignItems: 'start', marginBottom: '16px' }}>
         {/* Left: Vertical Temperature Sounding Graph */}
         <div style={{ border: '1px solid var(--border-color)', padding: '12px 16px', background: '#FFFFFF' }}>
-          <div style={{ fontWeight: 'bold', color: '#003366', fontSize: '13px', marginBottom: '4px' }}>
+          <div style={{ fontWeight: 'bold', color: 'var(--forest-900)', fontSize: '13px', marginBottom: '4px' }}>
             VERTICAL TEMPERATURE SOUNDING (GROUND THERMAL INVERSION)
           </div>
           <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '8px' }}>
@@ -152,7 +152,7 @@ export const GovernmentAtmosphereSection: React.FC<GovernmentAtmosphereSectionPr
 
         {/* Right: Inversion Diagnostic Table */}
         <div>
-          <strong style={{ fontSize: '13px', color: '#003366', display: 'block', marginBottom: '8px' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block', marginBottom: '8px' }}>
             ATMOSPHERIC STABILITY & TRAPPING RISK TABLE
           </strong>
           <table className="portal-table">
@@ -229,7 +229,7 @@ export const GovernmentAtmosphereSection: React.FC<GovernmentAtmosphereSectionPr
       <div style={{ border: '1px solid var(--border-color)', background: '#FFFFFF', padding: '14px 16px', marginTop: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <strong style={{ fontSize: '13px', color: '#003366', display: 'block' }}>
+            <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block' }}>
               24-HOUR COUPLED METEOROLOGICAL EVOLUTION GRAPH
             </strong>
             <span style={{ fontSize: '11px', color: '#64748B' }}>

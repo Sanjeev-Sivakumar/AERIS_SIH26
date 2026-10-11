@@ -1,4 +1,5 @@
 import React from 'react';
+import { ShieldCheck, ExternalLink } from 'lucide-react';
 import { SystemHealth } from '../../types';
 
 interface GovernmentModelSectionProps {
@@ -59,6 +60,70 @@ export const GovernmentModelSection: React.FC<GovernmentModelSectionProps> = ({ 
       <div className="portal-section-title">
         <span>MODEL VALIDATION, SPECTRAL MODES & DATA PROVENANCE</span>
         <span className="portal-section-subtitle">Formal Audited Mathematical Model Specifications</span>
+      </div>
+
+      {/* Official Proof & Validation Artifacts Verification Box */}
+      <div
+        style={{
+          border: '1.5px solid #16A34A',
+          background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)',
+          borderRadius: '10px',
+          padding: '16px 20px',
+          marginBottom: '22px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '14px',
+          boxShadow: '0 4px 14px rgba(22, 163, 74, 0.12)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '10px',
+              background: '#16A34A',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#FFFFFF'
+            }}
+          >
+            <ShieldCheck size={24} />
+          </div>
+          <div>
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: '#14532D', letterSpacing: '0.2px' }}>
+              OFFICIAL HACKATHON VERIFICATION & PROOF ARTIFACTS
+            </div>
+            <div style={{ fontSize: '12px', color: '#166534', marginTop: '2px' }}>
+              Includes WRF-Chem checkpoint weights, Koopman operator eigenvalues, raw CPCB sensor logs, and reproducible benchmarks.
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="https://drive.google.com/drive/folders/14wepK-b2KQ7AW8vIA-dW0N1DARpN011R?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            background: '#15803D',
+            color: '#FFFFFF',
+            padding: '8px 18px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            fontWeight: 800,
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 2px 6px rgba(21, 128, 61, 0.3)'
+          }}
+        >
+          <span>VIEW PROOF REPOSITORY (GOOGLE DRIVE)</span>
+          <ExternalLink size={13} />
+        </a>
       </div>
 
       {/* Model Operational Status Matrix */}

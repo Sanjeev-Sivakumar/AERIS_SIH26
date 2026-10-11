@@ -50,6 +50,14 @@ class Settings(BaseSettings):
     OPENAQ_API_KEY: Optional[str] = Field(default=None, description="OpenAQ v3 API Key")
     CDS_API_KEY: Optional[str] = Field(default=None, description="Copernicus CDS API Key")
 
+    # SMTP Email Configuration
+    EMAIL_ADDRESS: Optional[str] = Field(default=None, description="Sender email address for alerts")
+    EMAIL_PASSWORD: Optional[str] = Field(default=None, description="App password for SMTP sender")
+    SMTP_HOST: str = Field(default="smtp.gmail.com", description="SMTP server host")
+    SMTP_PORT: int = Field(default=587, description="SMTP server port")
+    # Generative AI Configuration
+    GENAI_API_KEY: Optional[str] = Field(default=None, description="Generative AI API Key for real-time citizen guidance")
+
     # Base Paths
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
     DATA_DIR: Path = BASE_DIR / "data"

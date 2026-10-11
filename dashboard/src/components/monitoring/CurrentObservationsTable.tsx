@@ -107,7 +107,7 @@ export const CurrentObservationsTable: React.FC<CurrentObservationsTableProps> =
       </div>
 
       {/* Structured Government Observation Table */}
-      <div style={{ overflowX: 'auto' }}>
+      <div className="table-responsive">
         <table className="portal-table">
           <thead>
             <tr>
@@ -202,13 +202,14 @@ export const CurrentObservationsTable: React.FC<CurrentObservationsTableProps> =
             </tr>
           </tbody>
         </table>
+      </div>
 
-        {/* Visual Parameter Benchmark Chart (Plotted Below Table) */}
-        <div style={{ marginTop: '16px', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '6px', padding: '14px 16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <strong style={{ fontSize: '12px', color: '#003366', textTransform: 'uppercase' }}>
-              Observed In-Situ Pollutants vs NAAQS Regulatory Limits
-            </strong>
+      {/* Visual Parameter Benchmark Chart (Plotted Below Table) */}
+      <div style={{ marginTop: '16px', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '14px 16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <strong style={{ fontSize: '12px', color: 'var(--forest-900)', textTransform: 'uppercase' }}>
+            Observed In-Situ Pollutants vs NAAQS Regulatory Limits
+          </strong>
             <span style={{ fontSize: '10px', color: '#64748B' }}>
               Standard: 24-Hour Average CPCB Thresholds
             </span>
@@ -248,6 +249,5 @@ export const CurrentObservationsTable: React.FC<CurrentObservationsTableProps> =
           </div>
         </div>
       </div>
-    </div>
   );
 };

@@ -830,7 +830,7 @@ export const GooglePollutionMap: React.FC<GooglePollutionMapProps> = ({ plumes, 
               >
                 <div style={{ padding: '6px', minWidth: '200px', fontSize: '11px', fontFamily: 'Arial, sans-serif' }}>
                   <div style={{ fontWeight: 'bold', color: '#003366', borderBottom: '1px solid #D9DDE1', paddingBottom: '3px' }}>
-                    🚨 {selectedHotspot.name.toUpperCase()} RECEPTOR
+                    {selectedHotspot.name.toUpperCase()} RECEPTOR
                   </div>
                   <div style={{ fontSize: '10px', color: '#54595D', marginTop: '3px' }}>
                     {selectedHotspot.type}
@@ -907,7 +907,7 @@ export const GooglePollutionMap: React.FC<GooglePollutionMapProps> = ({ plumes, 
                       strokeColor: '#FFFFFF',
                       strokeWeight: 2
                     }}
-                    title={`🔥 ${fire.cluster_id}: ${frp.toFixed(0)} MW`}
+                    title={`Cluster ${fire.cluster_id}: ${frp.toFixed(0)} MW`}
                   />
                 );
               })}
@@ -923,7 +923,7 @@ export const GooglePollutionMap: React.FC<GooglePollutionMapProps> = ({ plumes, 
               >
                 <div style={{ padding: '6px', minWidth: '200px', fontSize: '11px', fontFamily: 'Arial, sans-serif' }}>
                   <div style={{ fontWeight: 'bold', color: '#DC2626', borderBottom: '1px solid #D9DDE1', paddingBottom: '3px' }}>
-                    🔥 ACTIVE FIRE CLUSTER ({selectedFire.cluster_id})
+                    ACTIVE FIRE CLUSTER ({selectedFire.cluster_id})
                   </div>
                   <table style={{ width: '100%', fontSize: '11px', marginTop: '6px', borderCollapse: 'collapse' }}>
                     <tbody>
@@ -964,7 +964,7 @@ export const GooglePollutionMap: React.FC<GooglePollutionMapProps> = ({ plumes, 
           <div className="map-hud-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
               <strong style={{ fontSize: '12px', color: '#003366' }}>
-                📍 {hoverInfo.locationName}
+                {hoverInfo.locationName}
               </strong>
               <span className={`status-tag status-${hoverInfo.statusClass}`} style={{ fontSize: '10px' }}>
                 AQI {hoverInfo.aqi} · {hoverInfo.statusLabel}

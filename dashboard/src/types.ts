@@ -181,10 +181,112 @@ export interface WhyAQIRisesData {
   provenance: ProvenanceType;
 }
 
+export interface InfeasibilityCertificate {
+  certificate_id: string;
+  status: string;
+  title: string;
+  authority: string;
+  governing_law: string;
+  transboundary_advection_pm25: number;
+  zero_local_emission_floor_pm25: number;
+  zero_local_emission_floor_aqi: number;
+  demanded_target_aqi: number;
+  mathematical_proof: string;
+  minimum_achievable_aqi: number;
+  legal_classification: string;
+}
+
+export interface ActionWindowData {
+  status: string;
+  title: string;
+  hours_to_inversion_lid: number;
+  countdown_formatted: string;
+  current_pbl_height_m: number;
+  nocturnal_pbl_threshold_m: number;
+  projected_nocturnal_pbl_m: number;
+  dispersion_efficiency_multiplier: number;
+  action_recommendation: string;
+  golden_hour_deadline: string;
+  physics_basis: string;
+  provenance: ProvenanceType;
+}
+
+export interface AirshedFederalismData {
+  title: string;
+  framework: string;
+  arbitrage_multiplier: number;
+  headline: string;
+  policies_compared: {
+    intra_delhi_truck_ban: {
+      name: string;
+      state: string;
+      economic_disruption_cr_per_day: number;
+      pm25_reduction_ugm3: number;
+      cost_efficiency_cr_per_ug: number;
+      societal_impact: string;
+    };
+    punjab_stubble_subsidy: {
+      name: string;
+      state: string;
+      economic_disruption_cr_per_day: number;
+      pm25_reduction_ugm3: number;
+      cost_efficiency_cr_per_ug: number;
+      societal_impact: string;
+    };
+  };
+  cooperative_compact: {
+    mechanism: string;
+    daily_fiscal_transfer_cr: number;
+    net_delhi_economic_savings_cr_per_day: number;
+    net_delhi_air_quality_gain_pct: string;
+    game_theory_resolution: string;
+  };
+  provenance: string;
+}
+
+export interface CAQMDirectiveData {
+  directive_number: string;
+  title: string;
+  issuing_authority: string;
+  statutory_mandate: string;
+  generated_at: string;
+  cryptographic_hash: string;
+  baseline_telemetry: {
+    monitoring_network: string;
+    central_delhi_aqi: number;
+    category: string;
+    dominant_pollutant: string;
+    air_receptors_analyzed: number;
+    data_provenance: string;
+  };
+  meteorological_inversion_finding: {
+    status: string;
+    capping_lid_strength: string;
+    nocturnal_pbl_collapse_m: string;
+    koopman_dynamical_mode: string;
+    golden_action_window_deadline: string;
+  };
+  counterfactual_source_attribution: {
+    local_transport_vehicular: string;
+    construction_and_road_dust: string;
+    regional_agricultural_stubble: string;
+    industrial_point_sources: string;
+  };
+  mandated_curtailment_schedule: Array<{
+    sector: string;
+    mandated_curtailment: string;
+    compliance_deadline: string;
+    legal_basis: string;
+  }>;
+  legal_enforceability: string;
+  signatory: string;
+}
+
 export interface MPCStrategyResult {
   feasible: boolean;
   feasibility_status?: string;
   infeasibility_reason?: string | null;
+  infeasibility_certificate?: InfeasibilityCertificate | null;
   target_aqi_requested?: number;
   target_aqi_achieved?: number;
   final_predicted_aqi?: number;
@@ -231,12 +333,141 @@ export interface BackendActivity {
   system_status: string;
 }
 
+export interface WardInfo {
+  id: string;
+  name: string;
+  district: string;
+  lat: number;
+  lon: number;
+  base_aqi: number;
+  sensitivity: string;
+  schools_count: number;
+  hospitals_count: number;
+  vulnerable_population: string;
+  dominant_source: string;
+  risk_summary: string;
+}
+
+export interface HealthAdvisory {
+  vulnerable_groups: string;
+  outdoor_jogging: string;
+  schools_status: string;
+  air_purifiers: string;
+}
+
+export interface ActiveGeoAlert {
+  alert_id: string;
+  ward_id: string;
+  ward_name: string;
+  district: string;
+  coordinates: { lat: number; lon: number };
+  current_aqi: number;
+  projected_peak_aqi: number;
+  projected_peak_time: string;
+  severity: 'MODERATE' | 'POOR' | 'VERY_POOR' | 'SEVERE' | 'EMERGENCY';
+  dominant_pollutant: string;
+  primary_driver: string;
+  action_window_hours_left: number;
+  health_advisory: HealthAdvisory;
+  school_protocol: {
+    status: string;
+    recommendation: string;
+  };
+  hospital_protocol: {
+    status: string;
+    recommendation: string;
+  };
+}
+
+export interface BroadcastHistoryItem {
+  id: string;
+  timestamp: string;
+  ward_id: string;
+  ward_name: string;
+  severity: string;
+  category: string;
+  headline: string;
+  message: string;
+  target_audiences: string[];
+  channels: string[];
+  recipients_reached: number;
+  status: string;
+}
+
+export interface ActiveAlertsResponse {
+  timestamp: string;
+  active_alerts_count: number;
+  emergency_broadcast_active: boolean;
+  headline: string;
+  global_recommendation: string;
+  subscribers_count: number;
+  total_broadcasts_today: number;
+  alerts: ActiveGeoAlert[];
+  recent_broadcasts: BroadcastHistoryItem[];
+}
+
+export interface SchoolGuideline {
+  aqi_tier: string;
+  outdoor_assemblies: string;
+  sports_recess: string;
+  mask_protocol: string;
+  indoor_action: string;
+}
+
+export interface SchoolSafetyProtocolResponse {
+  title: string;
+  statutory_reference: string;
+  effective_date: string;
+  peak_risk_window: string;
+  school_guidelines: SchoolGuideline[];
+  total_schools_covered_ncr: number;
+  automated_notification_status: string;
+}
+
+export interface AWSServiceHealth {
+  name: string;
+  category: string;
+  status: string;
+  tier: string;
+  metrics: Record<string, string>;
+}
+
+export interface AWSInfrastructureResponse {
+  cloud_provider: string;
+  compliance_mode: string;
+  region: string;
+  last_audited: string;
+  services: AWSServiceHealth[];
+}
+
+export interface CitizenSubscriptionPayload {
+  name: string;
+  phone?: string;
+  email?: string;
+  ward_id: string;
+  role: string;
+  channels: string[];
+}
+
+export interface AlertBroadcastPayload {
+  ward_id: string;
+  severity: string;
+  category: string;
+  title: string;
+  message: string;
+  target_audiences: string[];
+  channels: string[];
+}
+
 export type NavigationPage = 
   | 'overview'
+  | 'alerts'
   | 'monitoring'
   | 'forecast'
   | 'atmosphere'
   | 'sources'
   | 'intervention'
+  | 'aws'
   | 'model';
+
 

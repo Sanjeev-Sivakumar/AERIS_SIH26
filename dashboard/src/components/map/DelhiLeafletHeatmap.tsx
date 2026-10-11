@@ -62,14 +62,50 @@ interface ReceptorStation {
 }
 
 const STRATEGIC_RECEPTORS: ReceptorStation[] = [
-  { id: 'CP', name: 'Central Delhi (Connaught Place)', lat: 28.6315, lon: 77.2167, locality: 'Central Delhi', type: 'Urban Commercial Core', baselineOffset: 0 },
-  { id: 'AV', name: 'Anand Vihar ISBT', lat: 28.6508, lon: 77.3152, locality: 'East Delhi', type: 'Heavy Transport Inflow Hotspot', baselineOffset: 48 },
-  { id: 'JP', name: 'Jahangirpuri', lat: 28.7300, lon: 77.1700, locality: 'North Delhi', type: 'Northern Agricultural Plume Inflow', baselineOffset: 36 },
-  { id: 'PB', name: 'Punjabi Bagh', lat: 28.6700, lon: 77.1300, locality: 'West Delhi', type: 'High Density Urban Arterial', baselineOffset: 24 },
-  { id: 'IGI', name: 'IGI Airport (T3)', lat: 28.5562, lon: 77.1000, locality: 'South-West Delhi', type: 'Aviation & Sub-Basin Corridor', baselineOffset: -15 },
-  { id: 'OKH', name: 'Okhla Phase-II', lat: 28.5300, lon: 77.2700, locality: 'South-East Delhi', type: 'Industrial Manufacturing Belt', baselineOffset: 32 },
-  { id: 'NOI', name: 'Noida Sector-62', lat: 28.6280, lon: 77.3649, locality: 'Gautam Buddha Nagar', type: 'Trans-Yamuna Sub-Airshed', baselineOffset: 20 },
-  { id: 'GUR', name: 'Gurugram CyberCity', lat: 28.4950, lon: 77.0890, locality: 'Gurugram NCR', type: 'Southern Industrial/IT Cluster', baselineOffset: 12 }
+  // 1. East & Trans-Yamuna
+  { id: 'AV', name: 'Anand Vihar ISBT', lat: 28.6508, lon: 77.3152, locality: 'East Delhi', type: 'DPCC CAAQMS · Heavy Transport Hotspot', baselineOffset: 48 },
+  { id: 'PPG', name: 'Patparganj Industrial Area', lat: 28.6230, lon: 77.2870, locality: 'East Delhi', type: 'DPCC CAAQMS · Commercial / Industrial', baselineOffset: 28 },
+  { id: 'VVK', name: 'Vivek Vihar', lat: 28.6720, lon: 77.3150, locality: 'East Delhi', type: 'DPCC CAAQMS · Residential Corridor', baselineOffset: 30 },
+  { id: 'SVH', name: 'Sonia Vihar Water Works', lat: 28.7100, lon: 77.2500, locality: 'North-East Delhi', type: 'DPCC CAAQMS · Riparian Airshed', baselineOffset: 22 },
+
+  // 2. Central Delhi
+  { id: 'CP', name: 'Central Delhi (Connaught Place)', lat: 28.6315, lon: 77.2167, locality: 'Central Delhi', type: 'CPCB CAAQMS · Urban Commercial Core', baselineOffset: 0 },
+  { id: 'ITO', name: 'ITO Vikas Marg Junction', lat: 28.6300, lon: 77.2450, locality: 'Central Delhi', type: 'CPCB CAAQMS · Dense Traffic Inflow', baselineOffset: 34 },
+  { id: 'MMG', name: 'Mandir Marg', lat: 28.6360, lon: 77.2010, locality: 'Central Delhi', type: 'DPCC CAAQMS · Institutional Zone', baselineOffset: -6 },
+  { id: 'PSA', name: 'Pusa IMD Observatory', lat: 28.6390, lon: 77.1460, locality: 'Central-West Delhi', type: 'IMD Station · Agronomy & Baseline', baselineOffset: -12 },
+  { id: 'LRD', name: 'Lodhi Road IMD', lat: 28.5910, lon: 77.2270, locality: 'Central-South Delhi', type: 'IMD CAAQMS · Background Meteorological', baselineOffset: -8 },
+
+  // 3. North & North-West Delhi
+  { id: 'JP', name: 'Jahangirpuri', lat: 28.7300, lon: 77.1700, locality: 'North Delhi', type: 'DPCC CAAQMS · Northern Advection Inflow', baselineOffset: 36 },
+  { id: 'BW', name: 'Bawana Mega Industrial Estate', lat: 28.7950, lon: 77.0450, locality: 'North-West Delhi', type: 'DPCC CAAQMS · Manufacturing Hotspot', baselineOffset: 45 },
+  { id: 'NR', name: 'Narela Industrial Cluster', lat: 28.8450, lon: 77.0900, locality: 'North-West Delhi', type: 'DPCC CAAQMS · Border Advection Hub', baselineOffset: 42 },
+  { id: 'DTU', name: 'DTU Shahbad Daulatpur', lat: 28.7500, lon: 77.1170, locality: 'North Delhi', type: 'CPCB CAAQMS · University Campus Receptor', baselineOffset: 18 },
+  { id: 'ALP', name: 'Alipur Sub-Basin', lat: 28.8150, lon: 77.1330, locality: 'North Delhi', type: 'DPCC CAAQMS · Agricultural Boundary', baselineOffset: 25 },
+  { id: 'ROH', name: 'Rohini Sector-16', lat: 28.7350, lon: 77.1180, locality: 'North-West Delhi', type: 'DPCC CAAQMS · High Density Urban', baselineOffset: 26 },
+  { id: 'ASH', name: 'Ashok Vihar Phase-I', lat: 28.6950, lon: 77.1810, locality: 'North-West Delhi', type: 'DPCC CAAQMS · Urban Arterial', baselineOffset: 20 },
+  { id: 'WZP', name: 'Wazirpur Industrial Area', lat: 28.6990, lon: 77.1650, locality: 'North Delhi', type: 'DPCC CAAQMS · Industrial Emissions Hotspot', baselineOffset: 38 },
+
+  // 4. West & South-West Delhi
+  { id: 'PB', name: 'Punjabi Bagh', lat: 28.6700, lon: 77.1300, locality: 'West Delhi', type: 'DPCC CAAQMS · Ring Road Arterial', baselineOffset: 24 },
+  { id: 'MK', name: 'Mundka Industrial Corridor', lat: 28.6830, lon: 77.0350, locality: 'West Delhi', type: 'DPCC CAAQMS · Industrial & Transport', baselineOffset: 35 },
+  { id: 'SHD', name: 'Shadipur Depot', lat: 28.6510, lon: 77.1580, locality: 'West Delhi', type: 'CPCB CAAQMS · Transit & Freight', baselineOffset: 22 },
+  { id: 'MYP', name: 'Mayapuri Industrial Phase-II', lat: 28.6300, lon: 77.1300, locality: 'West Delhi', type: 'DPCC CAAQMS · Metal & Industrial Scrap', baselineOffset: 26 },
+  { id: 'DWK', name: 'Dwarka Sector-8', lat: 28.5800, lon: 77.0700, locality: 'South-West Delhi', type: 'DPCC CAAQMS · Sub-City Residential', baselineOffset: 6 },
+  { id: 'IGI', name: 'IGI Airport Terminal 3', lat: 28.5562, lon: 77.1000, locality: 'South-West Delhi', type: 'IMD CAAQMS · Aviation & Sub-Basin', baselineOffset: -15 },
+
+  // 5. South & South-East Delhi
+  { id: 'RKP', name: 'R.K. Puram Sector-1', lat: 28.5648, lon: 77.1750, locality: 'South Delhi', type: 'DPCC CAAQMS · High Density Urban', baselineOffset: 16 },
+  { id: 'SAM', name: 'Sri Aurobindo Marg', lat: 28.5310, lon: 77.1900, locality: 'South Delhi', type: 'DPCC CAAQMS · Commercial Arterial', baselineOffset: 10 },
+  { id: 'SFT', name: 'Siri Fort Sports Complex', lat: 28.5500, lon: 77.2150, locality: 'South Delhi', type: 'CPCB CAAQMS · Urban Green Buffer', baselineOffset: -5 },
+  { id: 'NNG', name: 'Nehru Nagar', lat: 28.5680, lon: 77.2500, locality: 'South Delhi', type: 'DPCC CAAQMS · Ring Road Intersection', baselineOffset: 22 },
+  { id: 'OKH', name: 'Okhla Phase-II Industrial', lat: 28.5300, lon: 77.2700, locality: 'South-East Delhi', type: 'DPCC CAAQMS · Manufacturing Belt', baselineOffset: 32 },
+  { id: 'MRD', name: 'CRRI Mathura Road', lat: 28.5510, lon: 77.2730, locality: 'South-East Delhi', type: 'CPCB CAAQMS · Inter-State Highway Corridor', baselineOffset: 28 },
+
+  // 6. National Capital Region (NCR Satellite Cities)
+  { id: 'NOI', name: 'Noida Sector-62', lat: 28.6280, lon: 77.3649, locality: 'Gautam Buddha Nagar', type: 'UPPCB CAAQMS · Institutional & Expressway', baselineOffset: 20 },
+  { id: 'NOI1', name: 'Noida Sector-1', lat: 28.5890, lon: 77.3100, locality: 'Gautam Buddha Nagar', type: 'UPPCB CAAQMS · Industrial Fringe', baselineOffset: 24 },
+  { id: 'GUR', name: 'Gurugram CyberCity', lat: 28.4950, lon: 77.0890, locality: 'Gurugram NCR', type: 'HSPCB CAAQMS · Commercial & Highway', baselineOffset: 12 },
+  { id: 'FBD', name: 'Faridabad Sector-16A', lat: 28.4100, lon: 77.3100, locality: 'Faridabad NCR', type: 'HSPCB CAAQMS · Heavy Industrial Zone', baselineOffset: 18 }
 ];
 
 // Helper to construct custom Leaflet marker icons with clean styling
@@ -561,9 +597,9 @@ const StationComparisonGraph: React.FC<StationChartProps> = ({ data, variable, m
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <LineChart size={18} color="#003366" />
-          <strong style={{ fontSize: '15px', color: '#003366', textTransform: 'uppercase' }}>
-            Multi-Station Airshed Trendline ({data.length} Receptors)
+          <LineChart size={18} color="var(--forest-800)" />
+          <strong style={{ fontSize: '15px', color: 'var(--forest-900)', textTransform: 'uppercase' }}>
+            Multi-Station Airshed Trendline ({data.length} Ground Monitoring Receptors)
           </strong>
         </div>
 
@@ -573,7 +609,7 @@ const StationComparisonGraph: React.FC<StationChartProps> = ({ data, variable, m
             <button
               onClick={() => onModeToggle('value')}
               style={{
-                background: mode === 'value' ? '#003366' : 'transparent',
+                background: mode === 'value' ? 'var(--forest-800)' : 'transparent',
                 color: mode === 'value' ? '#FFFFFF' : '#475569',
                 border: 'none',
                 borderRadius: '4px',
@@ -588,7 +624,7 @@ const StationComparisonGraph: React.FC<StationChartProps> = ({ data, variable, m
             <button
               onClick={() => onModeToggle('aqi')}
               style={{
-                background: mode === 'aqi' ? '#003366' : 'transparent',
+                background: mode === 'aqi' ? 'var(--forest-800)' : 'transparent',
                 color: mode === 'aqi' ? '#FFFFFF' : '#475569',
                 border: 'none',
                 borderRadius: '4px',
@@ -605,7 +641,7 @@ const StationComparisonGraph: React.FC<StationChartProps> = ({ data, variable, m
       </div>
 
       <div style={{ width: '100%', overflowX: 'auto' }}>
-        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', minWidth: '700px' }}>
+        <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', minWidth: '950px' }}>
           <defs>
             <linearGradient id="stationAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#0284C7" stopOpacity="0.25" />
@@ -1533,13 +1569,13 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Layers size={18} color="#003366" />
-              <h3 style={{ fontSize: '17px', fontWeight: 800, color: '#003366', margin: 0, textTransform: 'uppercase' }}>
-                Airshed Intelligence & Ground Receptor Inventory
+              <Layers size={18} color="var(--forest-800)" />
+              <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'var(--forest-900)', margin: 0, textTransform: 'uppercase' }}>
+                Airshed Intelligence &amp; Ground Receptor Inventory (33 Stations)
               </h3>
             </div>
             <span style={{ fontSize: '13px', color: '#64748B' }}>
-              Synchronized measurements across 33 CPCB/DPCC/IMD continuous stations and 3-km WRF-Chem coupled model
+              Synchronized real-time telemetry across all 33 CPCB/DPCC/IMD continuous stations and 3-km WRF-Chem coupled model
             </span>
           </div>
 
@@ -1572,7 +1608,7 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
             marginBottom: '16px'
           }}
         >
-          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '6px', border: '1px solid #E2E8F0', borderLeft: '3px solid #DC2626' }}>
+          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E2E8F0', borderLeft: '4px solid #DC2626' }}>
             <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
               Peak Airshed Hotspot
             </span>
@@ -1584,7 +1620,7 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
             </div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '6px', border: '1px solid #E2E8F0', borderLeft: '3px solid #F59E0B' }}>
+          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E2E8F0', borderLeft: '4px solid #F59E0B' }}>
             <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
               Airshed Mean {variable.toUpperCase()}
             </span>
@@ -1596,7 +1632,7 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
             </div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '6px', border: '1px solid #E2E8F0', borderLeft: '3px solid #0284C7' }}>
+          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E2E8F0', borderLeft: '4px solid #0284C7' }}>
             <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
               Prevailing Surface Wind
             </span>
@@ -1608,7 +1644,7 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
             </div>
           </div>
 
-          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '6px', border: '1px solid #E2E8F0', borderLeft: '3px solid #7C3AED' }}>
+          <div style={{ background: '#F8FAFC', padding: '12px 16px', borderRadius: '8px', border: '1px solid #E2E8F0', borderLeft: '4px solid #7C3AED' }}>
             <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>
               Thermal Inversion Lid
             </span>
@@ -1622,76 +1658,58 @@ export const DelhiLeafletHeatmap: React.FC<DelhiLeafletHeatmapProps> = ({
         </div>
 
         {/* Detailed Ground Receptor Stations Table */}
-        <div style={{ overflowX: 'auto', marginBottom: '16px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+        <div className="table-responsive">
+          <table className="portal-table">
             <thead>
-              <tr style={{ background: '#F1F5F9', borderBottom: '2px solid #CBD5E1', textAlign: 'left', color: '#334155' }}>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Monitoring Station</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Coordinates</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Agency & Type</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>{variable.toUpperCase()} Level</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Calculated NAQI</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Health Category</th>
-                <th style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 700 }}>Telemetry Provenance</th>
+              <tr>
+                <th style={{ width: '22%' }}>Monitoring Station</th>
+                <th style={{ width: '16%' }}>Coordinates</th>
+                <th style={{ width: '22%' }}>Agency &amp; Type</th>
+                <th className="num" style={{ width: '12%' }}>{variable.toUpperCase()} Level</th>
+                <th className="num" style={{ width: '10%' }}>NAQI</th>
+                <th style={{ width: '10%' }}>Category</th>
+                <th style={{ width: '8%' }}>Provenance</th>
               </tr>
             </thead>
             <tbody>
-              {receptorReadings.map((r, i) => (
-                <tr
-                  key={r.id}
-                  style={{
-                    borderBottom: '1px solid #E2E8F0',
-                    background: i % 2 === 0 ? '#FFFFFF' : '#F8FAFC'
-                  }}
-                >
-                  <td style={{ padding: '10px 12px', fontWeight: 700, color: '#003366', fontSize: '13.5px' }}>
-                    {r.name}
+              {receptorReadings.map((r) => (
+                <tr key={r.id}>
+                  <td>
+                    <strong style={{ color: 'var(--forest-900)' }}>{r.name}</strong>
+                    <div style={{ fontSize: '11px', color: '#64748B' }}>{r.locality}</div>
                   </td>
-                  <td style={{ padding: '10px 12px', color: '#64748B', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>
+                  <td style={{ color: '#64748B', fontFamily: 'var(--font-mono)', fontSize: '11.5px' }}>
                     {r.lat.toFixed(4)}°N, {r.lon.toFixed(4)}°E
                   </td>
-                  <td style={{ padding: '10px 12px', color: '#475569', fontSize: '12.5px' }}>{r.type}</td>
-                  <td style={{ padding: '10px 12px', fontWeight: 800, color: '#0F172A', fontFamily: 'var(--font-mono)', fontSize: '14.5px' }}>
-                    {r.currentVal} µg/m³
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#64748B', marginLeft: '4px' }}>
-                      {timeStep === 0 ? '(In-Situ)' : `(+${timeStep}h)`}
-                    </span>
+                  <td style={{ color: '#475569', fontSize: '12px' }}>{r.type}</td>
+                  <td className="num">
+                    <strong style={{ color: '#0F172A', fontSize: '13.5px' }}>
+                      {r.currentVal} µg/m³
+                    </strong>
                   </td>
-                  <td style={{ padding: '10px 12px', fontWeight: 800, color: r.catColor, fontFamily: 'var(--font-mono)', fontSize: '14.5px' }}>
-                    {r.aqi}
+                  <td className="num">
+                    <strong style={{ color: r.catColor, fontSize: '14px' }}>
+                      {r.aqi}
+                    </strong>
                   </td>
-                  <td style={{ padding: '10px 12px' }}>
+                  <td>
                     <span
                       style={{
                         background: r.catBg,
                         color: r.catColor,
                         padding: '3px 8px',
-                        borderRadius: '4px',
+                        borderRadius: '999px',
                         fontWeight: 700,
-                        fontSize: '11.5px'
+                        fontSize: '11px',
+                        whiteSpace: 'nowrap'
                       }}
                     >
                       {r.category.toUpperCase()}
                     </span>
                   </td>
-                  <td style={{ padding: '10px 12px' }}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        background: timeStep === 0 ? '#DCFCE7' : '#E0F2FE',
-                        color: timeStep === 0 ? '#15803D' : '#0369A1',
-                        border: `1px solid ${timeStep === 0 ? '#86EFAC' : '#BAE6FD'}`,
-                        padding: '3px 8px',
-                        borderRadius: '4px',
-                        fontWeight: 800,
-                        fontSize: '11.5px',
-                        whiteSpace: 'nowrap'
-                      }}
-                    >
-                      <CheckCircle2 size={13} color={timeStep === 0 ? '#15803D' : '#0369A1'} />
-                      {timeStep === 0 ? 'CPCB/DPCC LIVE' : `DMDc ROLLOUT +${timeStep}h`}
+                  <td>
+                    <span className="prov-badge observed">
+                      {timeStep === 0 ? 'LIVE' : `+${timeStep}h`}
                     </span>
                   </td>
                 </tr>

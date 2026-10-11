@@ -82,7 +82,43 @@ data/final/**
 !data/final/**/
 !data/final/**/.gitkeep
 
+# Large media, video, audio & scratch directories
+*.mp4
+*.webm
+*.avi
+*.mp3
+*.wav
+artifacts_video/
+test_vid/
+scratch/
+scratch_dom.html
+~$*
+*.docx
+*.pdf
+scripts/blogs.txt
+subtitles.srt
+
+# One-off video generation & scratch scripts
+scripts/produce_final_video*.py
+scripts/produce_hackathon_final_video.py
+scripts/produce_perfect_synced_video.py
+scripts/record_full_demo.py
+scripts/test_audio*.py
+scripts/test_prabhat_audio.py
+scripts/test_tabs.py
+scripts/generate_*page*.py
+scripts/generate_full_dossier_poc_bw.py
+scripts/generate_poc_docx.py
+scripts/generate_professional_poc.py
+scripts/generate_voice_samples.py
+scripts/find_voices.py
+scripts/find_*hook*.py
+scripts/check_components_hooks.py
+scripts/inspect_timings.py
+scripts/calibrate_prabhat_timeline.py
+
 # OS generated
 .DS_Store
 Thumbs.db
+
 

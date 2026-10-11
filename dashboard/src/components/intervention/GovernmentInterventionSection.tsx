@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
+import { FileText, ShieldAlert } from 'lucide-react';
 import { MPCStrategyResult } from '../../types';
 import { optimizeMPC } from '../../api';
+import { AirshedFederalismCard } from './AirshedFederalismCard';
+import { InfeasibilityCertificateModal } from './InfeasibilityCertificateModal';
 
 interface GovernmentInterventionSectionProps {
   initialMpcResult: MPCStrategyResult | null;
@@ -17,6 +20,7 @@ export const GovernmentInterventionSection: React.FC<GovernmentInterventionSecti
   const [mpcResult, setMpcResult] = useState<MPCStrategyResult | null>(initialMpcResult);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hoverHour, setHoverHour] = useState<number | null>(null);
+  const [showInfeasibilityModal, setShowInfeasibilityModal] = useState<boolean>(false);
 
   React.useEffect(() => {
     if (initialMpcResult) {
@@ -346,6 +350,28 @@ export const GovernmentInterventionSection: React.FC<GovernmentInterventionSecti
           >
             {feasibilityStatus}
           </div>
+          {(feasibilityStatus !== 'FEASIBLE' || mpcResult?.infeasibility_certificate) && (
+            <button
+              onClick={() => setShowInfeasibilityModal(true)}
+              style={{
+                marginTop: '4px',
+                background: '#DC2626',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '3px',
+                padding: '3px 8px',
+                fontSize: '10px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              <FileText size={10} />
+              <span>VIEW INFEASIBILITY PROOF</span>
+            </button>
+          )}
         </div>
         <div>
           <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Baseline Peak PM2.5</div>
@@ -578,45 +604,47 @@ export const GovernmentInterventionSection: React.FC<GovernmentInterventionSecti
 
       {/* Sector Curtailment Requirements Table */}
       {curtailments && (
-        <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF', marginBottom: '20px' }}>
-          <strong style={{ fontSize: '13px', color: '#003366', display: 'block', marginBottom: '8px' }}>
+        <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)', marginBottom: '20px' }}>
+          <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block', marginBottom: '8px' }}>
             RECOMMENDED SECTOR EMISSION CURTAILMENT SCHEDULE
           </strong>
 
-          <table className="portal-table">
-            <thead>
-              <tr>
-                <th>Economic Target Sector</th>
-                <th className="num">Curtailment Recommendation</th>
-                <th>Regulatory Enforcement Action</th>
-                <th>Marginal Reduction Efficiency</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(curtailments).map(([sec, val]) => {
-                const percent = Math.min(100, Math.max(0, val));
-                return (
-                  <tr key={sec}>
-                    <td><strong>{sec.replace('_', ' ').toUpperCase()}</strong></td>
-                    <td className="num">
-                      <strong style={{ color: percent > 25 ? '#DC2626' : '#003366', fontSize: '13px' }}>
-                        {percent.toFixed(1)}%
-                      </strong>
-                    </td>
-                    <td>
-                      {percent > 30 ? 'Strict Odd-Even + Heavy Goods Ban' : percent > 15 ? 'Production Rate Cap (30%)' : 'Operational Guidance'}
-                    </td>
-                    <td><span className="prov-badge modelled">HIGH RESPONSE</span></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="portal-table">
+              <thead>
+                <tr>
+                  <th>Economic Target Sector</th>
+                  <th className="num">Curtailment Recommendation</th>
+                  <th>Regulatory Enforcement Action</th>
+                  <th>Marginal Reduction Efficiency</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(curtailments).map(([sec, val]) => {
+                  const percent = Math.min(100, Math.max(0, val));
+                  return (
+                    <tr key={sec}>
+                      <td><strong>{sec.replace('_', ' ').toUpperCase()}</strong></td>
+                      <td className="num">
+                        <strong style={{ color: percent > 25 ? '#DC2626' : 'var(--forest-800)', fontSize: '13px' }}>
+                          {percent.toFixed(1)}%
+                        </strong>
+                      </td>
+                      <td>
+                        {percent > 30 ? 'Strict Odd-Even + Heavy Goods Ban' : percent > 15 ? 'Production Rate Cap (30%)' : 'Operational Guidance'}
+                      </td>
+                      <td><span className="prov-badge modelled">HIGH RESPONSE</span></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
           {/* Plotted Line & Bar Graph of Sector Curtailments Directly Below */}
-          <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '14px 16px', borderRadius: '4px' }}>
+          <div style={{ marginTop: '14px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '14px 16px', borderRadius: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '8px' }}>
-              <span style={{ fontWeight: 700, color: '#003366' }}>OPTIMAL SECTOR CURTAILMENT INTENSITY (%)</span>
+              <span style={{ fontWeight: 700, color: 'var(--forest-900)' }}>OPTIMAL SECTOR CURTAILMENT INTENSITY (%)</span>
               <span style={{ color: '#64748B' }}>SLSQP Constrained Solution Output (Max 60% bounded by societal constraints)</span>
             </div>
             <svg viewBox="0 0 880 140" style={{ width: '100%', height: 'auto', display: 'block' }}>
@@ -693,58 +721,60 @@ export const GovernmentInterventionSection: React.FC<GovernmentInterventionSecti
       )}
 
       {/* Comparative Policy Matrix */}
-      <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', background: '#FFFFFF' }}>
-        <strong style={{ fontSize: '13px', color: '#003366', display: 'block', marginBottom: '8px' }}>
+      <div style={{ border: '1px solid var(--border-color)', padding: '16px 18px', background: '#FFFFFF', borderRadius: '12px', boxShadow: 'var(--card-shadow)' }}>
+        <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block', marginBottom: '8px' }}>
           POLICY STRATEGY COMPARATIVE MATRIX
         </strong>
 
-        <table className="portal-table">
-          <thead>
-            <tr>
-              <th>Policy Strategy</th>
-              <th className="num">Predicted Peak PM2.5</th>
-              <th className="num">Estimated AQI</th>
-              <th>Economic Cost Tier</th>
-              <th>Target Attainment Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Baseline (No Action)</strong></td>
-              <td className="num">268.0 µg/m³</td>
-              <td className="num">418 (Severe)</td>
-              <td>None (Zero Regulatory Cost)</td>
-              <td><span style={{ color: '#DC2626', fontWeight: 'bold' }}>✕ Non-Compliant</span></td>
-            </tr>
-            <tr>
-              <td>Low Cost Strategy</td>
-              <td className="num">235.4 µg/m³</td>
-              <td className="num">385 (Very Poor)</td>
-              <td>Low (Advisory & Traffic Flow)</td>
-              <td><span style={{ color: '#DC2626', fontWeight: 'bold' }}>✕ Exceeds Target</span></td>
-            </tr>
-            <tr style={{ background: '#F0FDF4' }}>
-              <td><strong>Balanced Strategy (Recommended)</strong></td>
-              <td className="num"><strong>198.2 µg/m³</strong></td>
-              <td className="num"><strong>305 (Poor)</strong></td>
-              <td>Moderate (GRAP Stage-III Interventions)</td>
-              <td><span style={{ color: '#16A34A', fontWeight: 'bold' }}>✓ Target Satisfied</span></td>
-            </tr>
-            <tr>
-              <td>Aggressive Strategy (Emergency)</td>
-              <td className="num">162.0 µg/m³</td>
-              <td className="num">262 (Moderate/Poor)</td>
-              <td>High (Complete Construction & Diesel Ban)</td>
-              <td><span style={{ color: '#16A34A', fontWeight: 'bold' }}>✓ Exceeds Target</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="table-responsive">
+          <table className="portal-table">
+            <thead>
+              <tr>
+                <th>Policy Strategy</th>
+                <th className="num">Predicted Peak PM2.5</th>
+                <th className="num">Estimated AQI</th>
+                <th>Economic Cost Tier</th>
+                <th>Target Attainment Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Baseline (No Action)</strong></td>
+                <td className="num">268.0 µg/m³</td>
+                <td className="num">418 (Severe)</td>
+                <td>None (Zero Regulatory Cost)</td>
+                <td><span style={{ color: '#DC2626', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', background: '#FEE2E2', fontSize: '12px' }}>Non-Compliant</span></td>
+              </tr>
+              <tr>
+                <td>Low Cost Strategy</td>
+                <td className="num">235.4 µg/m³</td>
+                <td className="num">385 (Very Poor)</td>
+                <td>Low (Advisory & Traffic Flow)</td>
+                <td><span style={{ color: '#DC2626', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', background: '#FEE2E2', fontSize: '12px' }}>Exceeds Target</span></td>
+              </tr>
+              <tr style={{ background: '#F0FDF4' }}>
+                <td><strong>Balanced Strategy (Recommended)</strong></td>
+                <td className="num"><strong>198.2 µg/m³</strong></td>
+                <td className="num"><strong>305 (Poor)</strong></td>
+                <td>Moderate (GRAP Stage-III Interventions)</td>
+                <td><span style={{ color: '#16A34A', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', background: '#DCFCE7', fontSize: '12px' }}>Target Satisfied</span></td>
+              </tr>
+              <tr>
+                <td>Aggressive Strategy (Emergency)</td>
+                <td className="num">162.0 µg/m³</td>
+                <td className="num">262 (Moderate/Poor)</td>
+                <td>High (Complete Construction & Diesel Ban)</td>
+                <td><span style={{ color: '#16A34A', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', background: '#DCFCE7', fontSize: '12px' }}>Exceeds Target</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         {/* Visual Line & Area Graph Comparing the 4 Tabular Policy Strategies Directly Below */}
-        <div style={{ marginTop: '16px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '14px 16px', borderRadius: '4px' }}>
+        <div style={{ marginTop: '16px', background: '#F8FAFC', border: '1px solid #E2E8F0', padding: '14px 16px', borderRadius: '8px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
             <div>
-              <strong style={{ fontSize: '13px', color: '#003366', display: 'block' }}>
+              <strong style={{ fontSize: '13px', color: 'var(--forest-900)', display: 'block' }}>
                 COMPARATIVE POLICY OUTCOME TRAJECTORY
               </strong>
               <span style={{ fontSize: '11px', color: '#64748B' }}>
@@ -846,6 +876,18 @@ export const GovernmentInterventionSection: React.FC<GovernmentInterventionSecti
           </svg>
         </div>
       </div>
+
+      {/* Airshed Federalism: Cross-Border Economic Arbitrage & Game Theory */}
+      <div style={{ marginTop: '20px' }}>
+        <AirshedFederalismCard />
+      </div>
+
+      {/* Formal Physical Infeasibility Certificate Modal */}
+      <InfeasibilityCertificateModal
+        isOpen={showInfeasibilityModal}
+        onClose={() => setShowInfeasibilityModal(false)}
+        certificate={mpcResult?.infeasibility_certificate || null}
+      />
     </div>
   );
 };

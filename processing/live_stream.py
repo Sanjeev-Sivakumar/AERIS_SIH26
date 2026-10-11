@@ -83,62 +83,59 @@ class LiveDataService:
 
     def _fetch_live_openaq_delhi(self) -> pd.DataFrame:
         """Fetch active monitoring stations in Delhi NCR bounding box via OpenAQ v3"""
-        bbox = "76.80,28.20,77.60,28.90"
-        url = f"https://api.openaq.org/v3/locations?bbox={bbox}&limit=35"
-        headers = {"X-API-Key": settings.OPENAQ_API_KEY}
+        cached = settings.DATA_RAW_DIR / "delhi_ncr" / "delhi_ncr_live_air_quality.csv"
+        
+        # Fast live fetch with 3s timeout
+        try:
+            bbox = "76.80,28.20,77.60,28.90"
+            url = f"https://api.openaq.org/v3/locations?bbox={bbox}&limit=35"
+            headers = {"X-API-Key": settings.OPENAQ_API_KEY}
 
-        resp = requests.get(url, headers=headers, timeout=15)
-        if resp.status_code != 200:
-            logger.warning(f"OpenAQ live request returned HTTP {resp.status_code}. Falling back to cached live snapshot.")
-            cached = settings.DATA_RAW_DIR / "delhi_ncr" / "delhi_ncr_live_air_quality.csv"
-            if cached.exists():
-                return pd.read_csv(cached)
-            return pd.DataFrame()
+            resp = requests.get(url, headers=headers, timeout=3)
+            if resp.status_code == 200:
+                locations = resp.json().get("results", [])
+                records = []
 
-        locations = resp.json().get("results", [])
-        records = []
+                def fetch_sensors_for_loc(loc):
+                    loc_id = loc.get("id")
+                    loc_name = loc.get("name")
+                    coords = loc.get("coordinates", {})
+                    lat = coords.get("latitude")
+                    lon = coords.get("longitude")
+                    s_url = f"https://api.openaq.org/v3/locations/{loc_id}/sensors"
+                    try:
+                        s_resp = requests.get(s_url, headers=headers, timeout=2)
+                        if s_resp.status_code == 200:
+                            for s in s_resp.json().get("results", []):
+                                p_name = s.get("parameter", {}).get("name", "").lower().replace(".", "").replace(" ", "").replace("₂", "2").replace("₃", "3")
+                                latest = s.get("latest") or s.get("summary") or {}
+                                val = latest.get("value") if isinstance(latest, dict) else None
+                                if val is not None and float(val) >= 0:
+                                    records.append({
+                                        "station_id": loc_id,
+                                        "station_name": loc_name,
+                                        "latitude": float(lat),
+                                        "longitude": float(lon),
+                                        "parameter": p_name,
+                                        "value": float(val)
+                                    })
+                    except Exception:
+                        pass
 
-        def fetch_sensors_for_loc(loc):
-            loc_id = loc.get("id")
-            loc_name = loc.get("name")
-            coords = loc.get("coordinates", {})
-            lat = coords.get("latitude")
-            lon = coords.get("longitude")
-            s_url = f"https://api.openaq.org/v3/locations/{loc_id}/sensors"
-            try:
-                s_resp = requests.get(s_url, headers=headers, timeout=8)
-                if s_resp.status_code == 200:
-                    for s in s_resp.json().get("results", []):
-                        p_name = s.get("parameter", {}).get("name", "").lower().replace(".", "").replace(" ", "").replace("₂", "2").replace("₃", "3")
-                        latest = s.get("latest") or s.get("summary") or {}
-                        val = latest.get("value") if isinstance(latest, dict) else None
-                        if val is not None and float(val) >= 0:
-                            records.append({
-                                "station_id": loc_id,
-                                "station_name": loc_name,
-                                "latitude": float(lat),
-                                "longitude": float(lon),
-                                "parameter": p_name,
-                                "value": float(val)
-                            })
-            except Exception:
-                pass
+                with ThreadPoolExecutor(max_workers=10) as executor:
+                    executor.map(fetch_sensors_for_loc, locations)
 
-        with ThreadPoolExecutor(max_workers=6) as executor:
-            executor.map(fetch_sensors_for_loc, locations)
+                if records:
+                    df = pd.DataFrame(records)
+                    cached.parent.mkdir(parents=True, exist_ok=True)
+                    df.to_csv(cached, index=False)
+                    return df
+        except Exception as e:
+            logger.warning(f"OpenAQ online fetch timed out ({e}). Ingesting local live ground telemetry cache.")
 
-        if not records:
-            cached = settings.DATA_RAW_DIR / "delhi_ncr" / "delhi_ncr_live_air_quality.csv"
-            if cached.exists():
-                return pd.read_csv(cached)
-            return pd.DataFrame()
-
-        df = pd.DataFrame(records)
-        # Cache snapshot
-        snap_path = settings.DATA_RAW_DIR / "delhi_ncr" / "delhi_ncr_live_air_quality.csv"
-        snap_path.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(snap_path, index=False)
-        return df
+        if cached.exists():
+            return pd.read_csv(cached)
+        return pd.DataFrame()
 
     def _fetch_live_firms_regional(self) -> pd.DataFrame:
         """Fetch active fire hotspots in regional domain from NASA FIRMS"""

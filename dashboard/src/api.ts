@@ -109,3 +109,66 @@ export async function triggerLiveSync(): Promise<any> {
   if (!res.ok) throw new Error(`Live sync failed: ${res.statusText}`);
   return res.json();
 }
+
+export async function fetchActionWindow(): Promise<any> {
+  const res = await fetch(`${API_BASE}/action-window`);
+  if (!res.ok) throw new Error(`Action window fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchAirshedFederalism(): Promise<any> {
+  const res = await fetch(`${API_BASE}/federalism`);
+  if (!res.ok) throw new Error(`Federalism fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchCAQMDirective(): Promise<any> {
+  const res = await fetch(`${API_BASE}/reports/caqm-directive`);
+  if (!res.ok) throw new Error(`CAQM directive fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchActiveAlerts(): Promise<any> {
+  const res = await fetch(`${API_BASE}/alerts/active`);
+  if (!res.ok) throw new Error(`Alerts fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchWards(): Promise<any> {
+  const res = await fetch(`${API_BASE}/alerts/wards`);
+  if (!res.ok) throw new Error(`Wards fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function broadcastAlert(payload: any): Promise<any> {
+  const res = await fetch(`${API_BASE}/alerts/broadcast`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error(`Broadcast alert failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function subscribeCitizen(payload: any): Promise<any> {
+  const res = await fetch(`${API_BASE}/alerts/subscribe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error(`Citizen subscribe failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchSchoolSafety(): Promise<any> {
+  const res = await fetch(`${API_BASE}/alerts/schools`);
+  if (!res.ok) throw new Error(`School safety fetch failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function fetchAWSHealth(): Promise<any> {
+  const res = await fetch(`${API_BASE}/aws/health`);
+  if (!res.ok) throw new Error(`AWS health fetch failed: ${res.statusText}`);
+  return res.json();
+}
+

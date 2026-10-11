@@ -384,7 +384,7 @@ export const OsmPollutionMap: React.FC<OsmPollutionMapProps> = ({ plumes, onSwit
                 >
                   <Popup>
                     <div style={{ padding: '4px', minWidth: '180px', fontSize: '11px' }}>
-                      <strong style={{ color: '#DC2626' }}>🔥 {fire.cluster_id}</strong><br />
+                      <strong style={{ color: '#DC2626' }}>CLUSTER: {fire.cluster_id}</strong><br />
                       FRP: <strong>{frp.toFixed(1)} MW</strong><br />
                       Fires: <strong>{fire.fire_count} hotspots</strong><br />
                       Distance: {(fire.distance_to_delhi_km ?? fire.distance_km ?? 150).toFixed(1)} km upwind<br />

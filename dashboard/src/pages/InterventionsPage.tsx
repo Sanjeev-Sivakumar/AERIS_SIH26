@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Sliders, CheckCircle2, XCircle, TrendingDown, ArrowRight, ShieldAlert, Zap } from 'lucide-react';
+import { Sliders, CheckCircle2, XCircle, TrendingDown, ArrowRight, ShieldAlert, Zap, FileText } from 'lucide-react';
 import { MPCStrategyResult } from '../types';
 import { optimizeMPC } from '../api';
+import { AirshedFederalismCard } from '../components/intervention/AirshedFederalismCard';
+import { InfeasibilityCertificateModal } from '../components/intervention/InfeasibilityCertificateModal';
 
 interface InterventionsPageProps {
   initialResult: MPCStrategyResult | null;
@@ -13,6 +15,7 @@ export const InterventionsPage: React.FC<InterventionsPageProps> = ({ initialRes
   const [strategy, setStrategy] = useState<'LOW_COST' | 'BALANCED' | 'AGGRESSIVE'>('BALANCED');
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<MPCStrategyResult | null>(initialResult);
+  const [showInfeasibilityModal, setShowInfeasibilityModal] = useState<boolean>(false);
 
   const handleRunOptimization = async () => {
     setLoading(true);
@@ -194,6 +197,31 @@ export const InterventionsPage: React.FC<InterventionsPageProps> = ({ initialRes
               : (result?.infeasibility_reason || 'Target unachievable under bounded ramp limits without violating essential societal functions.')}
           </p>
 
+          {(!isFeasible || result?.infeasibility_certificate) && (
+            <button
+              onClick={() => setShowInfeasibilityModal(true)}
+              style={{
+                marginTop: '10px',
+                background: '#dc2626',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '6px 14px',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                width: '100%',
+                justifyContent: 'center'
+              }}
+            >
+              <FileText size={13} />
+              <span>VIEW PHYSICAL INFEASIBILITY PROOF</span>
+            </button>
+          )}
+
           <div style={{ marginTop: '14px', borderTop: '1px solid var(--border-subtle)', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#64748B' }}>
             <span>Cost Index: <strong>{result?.cost_index?.toFixed(1) || '38.4'}</strong></span>
             <span>Mean Δ: <strong style={{ color: '#16A34A' }}>-{result?.expected_pm25_reduction_ugm3?.toFixed(1) || '45.2'} µg/m³</strong></span>
@@ -304,25 +332,25 @@ export const InterventionsPage: React.FC<InterventionsPageProps> = ({ initialRes
                 <td style={{ padding: '10px', fontWeight: 600 }}>NO ACTION</td>
                 <td style={{ padding: '10px', color: '#DC2626' }}>385</td>
                 <td style={{ padding: '10px', color: '#64748B' }}>—</td>
-                <td style={{ padding: '10px', textAlign: 'center', color: '#DC2626', fontWeight: 700 }}>✕</td>
+                <td style={{ padding: '10px', textAlign: 'center', color: '#DC2626', fontWeight: 600 }}>Fail</td>
               </tr>
               <tr style={{ borderBottom: '1px solid #F1F5F9' }}>
                 <td style={{ padding: '10px', fontWeight: 600 }}>LOW COST</td>
                 <td style={{ padding: '10px', color: '#EA580C' }}>342</td>
                 <td style={{ padding: '10px', color: '#16A34A' }}>LOW</td>
-                <td style={{ padding: '10px', textAlign: 'center', color: '#DC2626', fontWeight: 700 }}>✕</td>
+                <td style={{ padding: '10px', textAlign: 'center', color: '#DC2626', fontWeight: 600 }}>Fail</td>
               </tr>
               <tr style={{ borderBottom: '1px solid #F1F5F9', background: '#F8FAFC' }}>
-                <td style={{ padding: '10px', fontWeight: 700, color: '#2563EB' }}>BALANCED</td>
-                <td style={{ padding: '10px', color: '#2563EB', fontWeight: 700 }}>288</td>
+                <td style={{ padding: '10px', fontWeight: 700, color: 'var(--forest-800)' }}>BALANCED</td>
+                <td style={{ padding: '10px', color: 'var(--forest-800)', fontWeight: 700 }}>288</td>
                 <td style={{ padding: '10px', color: '#EA580C' }}>MED</td>
-                <td style={{ padding: '10px', textAlign: 'center', color: '#16A34A', fontWeight: 700 }}>✓</td>
+                <td style={{ padding: '10px', textAlign: 'center', color: '#16A34A', fontWeight: 600 }}>Pass</td>
               </tr>
               <tr>
                 <td style={{ padding: '10px', fontWeight: 600 }}>AGGRESSIVE</td>
                 <td style={{ padding: '10px', color: '#16A34A' }}>240</td>
                 <td style={{ padding: '10px', color: '#DC2626' }}>HIGH</td>
-                <td style={{ padding: '10px', textAlign: 'center', color: '#16A34A', fontWeight: 700 }}>✓</td>
+                <td style={{ padding: '10px', textAlign: 'center', color: '#16A34A', fontWeight: 600 }}>Pass</td>
               </tr>
             </tbody>
           </table>
@@ -361,6 +389,16 @@ export const InterventionsPage: React.FC<InterventionsPageProps> = ({ initialRes
           </div>
         </div>
       </div>
+
+      {/* 5. Airshed Federalism (Cross-Border Economic Arbitrage) */}
+      <AirshedFederalismCard />
+
+      {/* Infeasibility Certificate Modal */}
+      <InfeasibilityCertificateModal
+        isOpen={showInfeasibilityModal}
+        onClose={() => setShowInfeasibilityModal(false)}
+        certificate={result?.infeasibility_certificate || null}
+      />
     </div>
   );
 };
