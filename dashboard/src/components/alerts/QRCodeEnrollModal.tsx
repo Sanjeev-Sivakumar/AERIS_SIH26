@@ -50,7 +50,7 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
   onClose,
   onNavigateToCitizen
 }) => {
-  const [activeTab, setActiveTab] = useState<'email' | 'whatsapp' | 'web'>('email');
+  const [activeTab, setActiveTab] = useState<'email' | 'web'>('email');
   const [selectedWardId, setSelectedWardId] = useState<string>('anand_vihar');
   const [copied, setCopied] = useState<boolean>(false);
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
@@ -68,12 +68,9 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
     ? window.location.host
     : (typeof window !== 'undefined' && window.location.host ? window.location.host : '192.168.1.102:8000');
   const mobilePortalUrl = `${protocol}//${targetHost}/mobile?ward=${selectedWard.id}`;
-  const whatsappPhone = '919876543210';
-  const whatsappText = `START AERIS AIR ALERTS ${selectedWard.name.toUpperCase()}`;
-  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`;
   const webPortalUrl = `${protocol}//${targetHost}/mobile`;
 
-  const activeTargetUrl = activeTab === 'email' ? mobilePortalUrl : activeTab === 'whatsapp' ? whatsappUrl : webPortalUrl;
+  const activeTargetUrl = activeTab === 'email' ? mobilePortalUrl : webPortalUrl;
 
   useEffect(() => {
     if (isOpen) {
@@ -201,7 +198,7 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
                 CITIZEN &amp; SCHOOL QR ALERT GATEWAY
               </h3>
               <span style={{ fontSize: '12px', color: '#D8F3DC' }}>
-                Real-Time Email &amp; WhatsApp Air Quality Warnings
+                Real-Time Email &amp; Mobile Air Quality Warnings
               </span>
             </div>
           </div>
@@ -225,11 +222,11 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
           </button>
         </div>
 
-        {/* 3-Tab Selection Header */}
+        {/* 2-Tab Selection Header */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
+            gridTemplateColumns: '1fr 1fr',
             background: '#F4F2EB',
             padding: '6px 10px',
             gap: '6px',
@@ -256,30 +253,7 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
             }}
           >
             <Mail size={13} color={activeTab === 'email' ? '#74C69D' : undefined} />
-            <span>EMAIL ALERTS</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('whatsapp')}
-            style={{
-              padding: '8px 10px',
-              borderRadius: 'var(--radius-pill)',
-              border: 'none',
-              background: activeTab === 'whatsapp' ? '#1B4332' : 'transparent',
-              color: activeTab === 'whatsapp' ? '#FFFFFF' : 'var(--text-secondary)',
-              fontWeight: 800,
-              fontSize: '11.5px',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '5px',
-              transition: 'all 0.15s ease',
-              boxShadow: activeTab === 'whatsapp' ? '0 2px 8px rgba(27, 67, 50, 0.25)' : 'none'
-            }}
-          >
-            <MessageSquare size={13} color={activeTab === 'whatsapp' ? '#74C69D' : undefined} />
-            <span>WHATSAPP</span>
+            <span>EMAIL REGISTRATION</span>
           </button>
 
           <button
@@ -302,7 +276,7 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
             }}
           >
             <Globe size={13} color={activeTab === 'web' ? '#74C69D' : undefined} />
-            <span>WEB VIEW</span>
+            <span>MOBILE WEB VIEW</span>
           </button>
         </div>
 
@@ -362,10 +336,6 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
             {activeTab === 'email' ? (
               <>
                 Scan with any phone camera to open the <strong>Mobile Registration Form</strong>, enter your email, and receive instant 6-hour advance air warnings directly in your inbox.
-              </>
-            ) : activeTab === 'whatsapp' ? (
-              <>
-                Scan with any phone camera or Google Lens to immediately open <strong>WhatsApp</strong> and subscribe for automated air pollution warnings.
               </>
             ) : (
               <>
@@ -483,56 +453,6 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
             </div>
           )}
 
-          {/* TAB 2: WhatsApp Preview Box */}
-          {activeTab === 'whatsapp' && (
-            <div
-              style={{
-                background: '#F0FDF4',
-                border: '1px solid #BBF7D0',
-                borderRadius: 'var(--radius-md)',
-                padding: '14px',
-                marginBottom: '16px',
-                textAlign: 'left'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#166534', fontWeight: 800, fontSize: '12px', marginBottom: '6px' }}>
-                <MessageSquare size={14} />
-                <span>WHAT HAPPENS ON SCAN:</span>
-              </div>
-              <ol style={{ margin: '0 0 10px 0', paddingLeft: '18px', fontSize: '12px', color: '#14532D', lineHeight: 1.5 }}>
-                <li>Opens WhatsApp with pre-filled message: <strong>"{whatsappText}"</strong></li>
-                <li>Tap <strong>Send</strong> in WhatsApp.</li>
-                <li>AERIS Cloud instantly replies with live AQI, 6-hour inversion warning, and school guidelines!</li>
-              </ol>
-
-              {/* Simulated WhatsApp Reply Bubble */}
-              <div
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #DCFCE7',
-                  borderLeft: '4px solid #16A34A',
-                  borderRadius: '6px',
-                  padding: '10px 12px',
-                  fontSize: '11.5px',
-                  color: '#1F2937',
-                  lineHeight: 1.45,
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-                }}
-              >
-                <div style={{ fontWeight: 800, color: '#166534', marginBottom: '3px' }}>
-                  AERIS AIRSHED BOT • {selectedWard.name.toUpperCase()}
-                </div>
-                <div>Current AQI: <strong>{selectedWard.baseAqi} (Severe)</strong> • Dominant: PM2.5</div>
-                <div style={{ color: '#DC2626', fontWeight: 700, marginTop: '2px' }}>
-                  Warning: Severe thermal capping lid expected from 19:30 IST.
-                </div>
-                <div style={{ color: '#0369A1', marginTop: '2px' }}>
-                  School Action: Suspend outdoor assemblies & sports.
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Action Row */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
             <button
@@ -556,51 +476,25 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
               <span>DOWNLOAD POSTER QR (PNG)</span>
             </button>
 
-            {activeTab === 'whatsapp' ? (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  background: '#16A34A',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '999px',
-                  padding: '7px 16px',
-                  fontSize: '12px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  textDecoration: 'none',
-                  boxShadow: '0 2px 8px rgba(22, 163, 74, 0.3)'
-                }}
-              >
-                <MessageSquare size={13} />
-                <span>OPEN IN WHATSAPP WEB</span>
-              </a>
-            ) : (
-              <button
-                onClick={handleCopyLink}
-                style={{
-                  background: copied ? '#2D6A4F' : '#1B4332',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '999px',
-                  padding: '7px 16px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '5px'
-                }}
-              >
-                {copied ? <Check size={13} /> : <Copy size={13} />}
-                <span>{copied ? 'LINK COPIED' : 'COPY REGISTRATION LINK'}</span>
-              </button>
-            )}
+            <button
+              onClick={handleCopyLink}
+              style={{
+                background: copied ? '#2D6A4F' : '#1B4332',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '999px',
+                padding: '7px 16px',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              {copied ? <Check size={13} /> : <Copy size={13} />}
+              <span>{copied ? 'LINK COPIED' : 'COPY REGISTRATION LINK'}</span>
+            </button>
           </div>
 
           {/* Value Highlights */}

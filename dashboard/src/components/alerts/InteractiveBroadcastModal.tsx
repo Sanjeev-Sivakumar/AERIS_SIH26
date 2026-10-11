@@ -31,9 +31,8 @@ export const InteractiveBroadcastModal: React.FC<InteractiveBroadcastModalProps>
   const [audiences, setAudiences] = useState<string[]>(['schools', 'citizens', 'hospitals']);
   const [channels, setChannels] = useState<string[]>([
     'web_push',
-    'whatsapp',
-    'sms',
-    'sns_broadcast'
+    'sns_broadcast',
+    'smart_vms'
   ]);
   const [customHeadline, setCustomHeadline] = useState<string>(
     'CRITICAL AIR QUALITY & THERMAL INVERSION ADVISORY'
@@ -197,7 +196,7 @@ export const InteractiveBroadcastModal: React.FC<InteractiveBroadcastModalProps>
                 GEO-ALERT DISPATCH CENTER
               </h3>
               <span style={{ fontSize: '12px', color: '#D8F3DC' }}>
-                Multi-Channel Emergency Broadcast (Web Push • SNS • SMS • WhatsApp • VMS)
+                Multi-Channel Emergency Broadcast (Web Push • Amazon SNS • Smart City VMS)
               </span>
             </div>
           </div>
@@ -438,8 +437,6 @@ export const InteractiveBroadcastModal: React.FC<InteractiveBroadcastModalProps>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
                   {[
                     { id: 'web_push', label: 'Web Push', icon: <BellRing size={13} /> },
-                    { id: 'whatsapp', label: 'WhatsApp', icon: <Smartphone size={13} /> },
-                    { id: 'sms', label: 'SMS Gateway', icon: <Mail size={13} /> },
                     { id: 'sns_broadcast', label: 'AWS SNS Topic', icon: <Share2 size={13} /> },
                     { id: 'smart_vms', label: 'Smart City VMS', icon: <Tv size={13} /> }
                   ].map((ch) => (

@@ -49,7 +49,7 @@ export const CitizenCommunityPortal: React.FC<CitizenCommunityPortalProps> = ({
   const [subPhone, setSubPhone] = useState<string>('');
   const [subEmail, setSubEmail] = useState<string>('');
   const [subRole, setSubRole] = useState<string>('citizen');
-  const [subChannels, setSubChannels] = useState<string[]>(['push', 'whatsapp']);
+  const [subChannels, setSubChannels] = useState<string[]>(['email', 'push']);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [subSuccess, setSubSuccess] = useState<any | null>(null);
 
@@ -539,7 +539,7 @@ export const CitizenCommunityPortal: React.FC<CitizenCommunityPortalProps> = ({
             </h3>
           </div>
           <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', margin: '0 0 16px 0', lineHeight: 1.45 }}>
-            Automated SMS, WhatsApp &amp; Push alerts dispatched via Amazon SNS before nocturnal thermal inversions.
+            Automated Email &amp; Web Push alerts dispatched via Amazon SNS before nocturnal thermal inversions.
           </p>
 
           {subSuccess ? (
@@ -587,7 +587,7 @@ export const CitizenCommunityPortal: React.FC<CitizenCommunityPortalProps> = ({
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, color: 'var(--forest-900)', marginBottom: '3px' }}>
-                    WHATSAPP / PHONE:
+                    PHONE NUMBER (OPTIONAL):
                   </label>
                   <input
                     type="tel"
@@ -680,10 +680,8 @@ export const CitizenCommunityPortal: React.FC<CitizenCommunityPortalProps> = ({
                 </label>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                   {[
-                    { id: 'push', label: 'Web Push' },
-                    { id: 'whatsapp', label: 'WhatsApp' },
-                    { id: 'sms', label: 'SMS' },
-                    { id: 'email', label: 'Email' }
+                    { id: 'email', label: 'Email Advisory' },
+                    { id: 'push', label: 'Web Push' }
                   ].map((ch) => (
                     <button
                       key={ch.id}
