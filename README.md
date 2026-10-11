@@ -2,11 +2,10 @@
 
 <div align="center">
 
-[![AWS Cloud](https://img.shields.io/badge/AWS_Architecture-100%25_Open_Source-FF9900?logo=amazon-aws&logoColor=white)](https://aws.amazon.com)
 [![AWS Cedar](https://img.shields.io/badge/Policy_Engine-AWS_Cedar_v3.1-4F46E5?logo=cedar&logoColor=white)](https://www.cedarpolicy.com)
 [![OpenSearch](https://img.shields.io/badge/Search-Amazon_OpenSearch_v2.11-005ECC?logo=opensearch&logoColor=white)](https://opensearch.org)
-[![Strands Agents](https://img.shields.io/badge/Agents-Strands_SDK_v1.4-10B981)](https://github.com/awslabs)
-[![LocalStack](https://img.shields.io/badge/Offline_Cloud-LocalStack_v3.4-EC4899?logo=localstack&logoColor=white)](https://localstack.cloud)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI_Python_3.11-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/Frontend-React_TypeScript-61DAFB?logo=react&logoColor=black)](https://react.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Verified RMSE](https://img.shields.io/badge/Model_RMSE-14.8_µg%2Fm³-success)](https://drive.google.com/drive/folders/14wepK-b2KQ7AW8vIA-dW0N1DARpN011R?usp=sharing)
 
@@ -27,68 +26,59 @@ Every winter, **30 million people** across Delhi NCR are trapped under a hazardo
 AERIS fundamentally shifts environmental governance from **passive observation to proactive control**:
 * **The Physical Reality**: Particulate spikes are driven by nocturnal **Planetary Boundary Layer (PBL) collapse** (<200m) and **thermal inversion lids** (+2.4 K/100m) compressing emissions into 1/6th of the volume.
 * **The Breakthrough**: Using **Koopman Operator Theory & Dynamic Mode Decomposition with Control (DMDc)**, AERIS replaces slow chemical-transport supercomputers (WRF-Chem) and unreliable black-box deep learning with real-time linear state-space operators, propagating **72-hour forward rollouts in 8.4 milliseconds** with analytical Lyapunov uncertainty bounds.
-* **The Policy Engine**: Evaluates fine-grained statutory directives via **AWS Cedar**, spatial search via **Amazon OpenSearch**, multi-agent advisory synthesis via **Strands Agents SDK**, and offline cloud infrastructure via **AWS SAM CLI & LocalStack**.
+* **The Policy Engine**: Evaluates fine-grained statutory directives via **AWS Cedar (v3.1)**, sub-3ms spatial search via **Amazon OpenSearch (v2.11)**, and proactive municipal intervention optimization via **Model Predictive Control (MPC)**.
 
 ---
 
-## 2. Amazon & AWS Stacks Architecture
+## 2. Open-Source AWS & System Architecture
 
-AERIS is architected to run entirely on open-source AWS tooling on a local developer machine or municipal server with **zero cloud lock-in and ₹0 / $0.00 cloud bill**:
+AERIS is architected to run entirely on open-source tooling on a local developer machine or municipal server with **zero cloud lock-in and ₹0 / $0.00 cloud bill**:
 
 ```
-                       AERIS 100% OPEN-SOURCE AWS SYSTEM ARCHITECTURE
-   
+                       AERIS 100% OPEN-SOURCE SYSTEM ARCHITECTURE
+    
   ┌────────────────────────────────────────────────────────────────────────────────────────┐
-  │                           CITIZEN & SCHOOL EDGE CONSUMPTION                            │
-  │   Mobile Dynamic Gateway (/mobile)  ·  Dynamic QR Scan-to-Email  ·  Responsive SPA     │
+  │                           CITIZEN & SCHOOL EDGE INTERFACE                              │
+  │   Mobile Gateway (/mobile)  ·  Dynamic QR Onboarding  ·  React + TypeScript SPA        │
   └───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                              │ HTTP / JSON
+                                              │ HTTP / JSON REST API (Port 8000)
                                               ▼
   ┌────────────────────────────────────────────────────────────────────────────────────────┐
-  │                             AWS SAM CLI & LOCALSTACK RUNTIME                           │
+  │                         AERIS FASTAPI HIGH-PERFORMANCE BACKEND                         │
   │                                                                                        │
-  │   ┌─────────────────────┐   ┌──────────────────────────┐   ┌───────────────────────┐   │
-  │   │  Amazon API Gateway │   │ AWS Lambda (Python 3.11) │   │ Amazon DynamoDB       │   │
-  │   │  (SAM REST Router)  │──▶│ Koopman DMDc State Engine│──▶│ Ward Subscriptions   │   │
-  │   └─────────────────────┘   └─────────────┬────────────┘   │ & Audit Trails        │   │
-  │                                           │                └───────────────────────┘   │
-  │                                           ▼                                            │
   │   ┌────────────────────────────────────────────────────────────────────────────────┐   │
-  │   │                      AWS CEDAR AUTHORIZATION POLICY ENGINE                     │   │
-  │   │     Evaluates fine-grained municipal policies (policies/municipal_policy.cedar)│   │
-  │   │     Rule 4 Invariant: Forbids Red Alerts unless projected AQI > 200            │   │
+  │   │                    KOOPMAN OPERATOR DMDC & MPC ENGINE                          │   │
+  │   │   72-Hour Physical Atmospheric Rollouts in 8.4ms across 900 3-km Grid Cells    │   │
+  │   │   Lyapunov Analytical Uncertainty Propagation · SciPy SLSQP MPC Controller     │   │
   │   └───────────────────────────────────────┬────────────────────────────────────────┘   │
   │                                           │                                            │
   │             ┌─────────────────────────────┴─────────────────────────────┐              │
   │             ▼                                                           ▼              │
   │   ┌───────────────────────────────────┐               ┌────────────────────────────┐   │
-  │   │      AMAZON OPENSEARCH SERVICE    │               │     STRANDS AGENTS SDK     │   │
-  │   │   Sub-millisecond geospatial      │               │   Multi-step reasoning for │   │
-  │   │   hotspot indexing across 33      │               │   school protocols, GRAP-IV│   │
-  │   │   stations & 900 3-km grid cells  │               │   directives & ventilation │   │
+  │   │      AWS CEDAR POLICY ENGINE      │               │  AMAZON OPENSEARCH (V2.11) │   │
+  │   │   Formal declarative policy       │               │  Sub-3ms geospatial query  │   │
+  │   │   authorization (CAQM Act 2021)   │               │  indexing across 33 CPCB   │   │
+  │   │   Rule 4: Invariant blocks Red    │               │  stations & spatial grid   │   │
+  │   │   Alerts if projected AQI <= 200  │               │  bounding boxes            │   │
   │   └───────────────────────────────────┘               └────────────────────────────┘   │
   │                                           │                                            │
   │                                           ▼                                            │
   │   ┌────────────────────────────────────────────────────────────────────────────────┐   │
-  │   │                 AMAZON EVENTBRIDGE, SNS & SMTP BROADCAST ENGINE                │   │
-  │   │     Dispatches verified emergency warning emails with Critical Danger Corridors│   │
+  │   │                  REAL-TIME CITIZEN & SCHOOL ADVISORY BROADCAST                 │   │
+  │   │   Automated SMTP Notification Dispatcher with Pre-Inversion Warning Schedules  │   │
   │   └────────────────────────────────────────────────────────────────────────────────┘   │
   └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Amazon Stacks Breakdown
+### Open-Source Stack Breakdown
 
-| AWS Tool / Service | Project Role & Implementation | Source File |
+| Tool / Technology | Project Role & Implementation | Source File |
 | :--- | :--- | :--- |
-| **AWS Cedar** | Formal declarative policy authorization. Evaluates whether a CAQM nodal officer, school principal, or traffic police can perform municipal actions; enforces safety invariants. | [`policies/municipal_policy.cedar`](policies/municipal_policy.cedar)<br>[`processing/cedar_engine.py`](processing/cedar_engine.py) |
-| **Amazon OpenSearch** | Sub-millisecond geospatial and time-series search indexing across 33 CPCB monitoring stations and 900 3-km grid cells. | [`processing/opensearch_client.py`](processing/opensearch_client.py) |
-| **Strands Agents SDK** | Context-aware multi-step reasoning translating raw telemetry into actionable natural-language advisories for schools and citizens. | [`processing/strands_agent.py`](processing/strands_agent.py) |
-| **AWS SAM CLI** | Serverless Application Model infrastructure-as-code template defining Lambda functions, API Gateway, and DynamoDB tables. | [`template.yaml`](template.yaml) |
-| **LocalStack** | Offline local cloud emulator running DynamoDB, SNS, S3, and EventBridge with zero AWS bill. | [`docker-compose.localstack.yml`](docker-compose.localstack.yml)<br>[`processing/localstack_adapter.py`](processing/localstack_adapter.py) |
-| **Amazon DynamoDB** | Ultra-fast key-value store for citizen ward enrollments, school profiles, and alert broadcast audit logs. | [`template.yaml`](template.yaml)<br>[`processing/alerts_service.py`](processing/alerts_service.py) |
-| **Amazon EventBridge** | Event-driven cron triggers for 72-hour forecast recalculations and threshold monitoring. | [`template.yaml`](template.yaml) |
-| **Amazon SNS / SMTP** | Multi-channel fanout engine delivering verified email advisories with critical danger area avoidance schedules. | [`processing/email_dispatcher.py`](processing/email_dispatcher.py) |
-| **Finch & Firecracker** | Containerization and microVM isolation pattern for reproducible deployments. | [`Dockerfile`](Dockerfile) |
+| **AWS Cedar (v3.1)** | Formal declarative policy authorization. Evaluates whether a CAQM nodal officer, school principal, or traffic police can perform municipal actions; enforces strict safety invariants. | [`policies/municipal_policy.cedar`](policies/municipal_policy.cedar) |
+| **Amazon OpenSearch (v2.11)** | Sub-3ms geospatial and time-series search indexing across 33 CPCB monitoring stations and 900 3-km grid cells. | [`docker-compose.localstack.yml`](docker-compose.localstack.yml)<br>[`template.yaml`](template.yaml) |
+| **FastAPI REST Backend** | High-performance Python async REST server running the Koopman forward rollout engine, Lyapunov uncertainty bounds, and SLSQP Model Predictive Control. | [`api/server.py`](api/server.py) |
+| **React + TypeScript** | Interactive single-page control room built with Vite, Leaflet geospatial overlays, and mobile QR onboarding gateway. | [`dashboard/`](dashboard/) |
+| **Docker Engine** | Local containerization runtime for reproducible local execution of OpenSearch and backend services. | [`Dockerfile`](Dockerfile)<br>[`docker-compose.localstack.yml`](docker-compose.localstack.yml) |
 
 ---
 

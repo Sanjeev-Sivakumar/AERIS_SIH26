@@ -1,17 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
 Description: >
   AERIS — Atmospheric Emission-Response Intelligence System
-  Open-Source AWS Architecture Template for Bharat Builds 2026.
-  Features: Amazon OpenSearch (v2.11), Amazon Verified Permissions (AWS Cedar v3.1),
-  Amazon App Runner (FastAPI Container Engine), and Amazon S3.
-
-Parameters:
-  Environment:
-    Type: String
-    Default: local
-    AllowedValues: [local, prod]
-    Description: Deployment target environment
+  100% Open-Source AWS Tooling Template for Bharat Builds 2026.
+  Defines the open-source AWS stack used in AERIS: Amazon OpenSearch (v2.11)
+  for sub-3ms geospatial indexing and AWS Cedar (Verified Permissions v3.1)
+  for formal statutory municipal policy authorization.
 
 Resources:
   # 1. Amazon OpenSearch Service Domain (Sub-3ms Geospatial Pollution Indexing)
@@ -44,66 +37,6 @@ Resources:
         AWS Cedar formal policy store executing statutory CAQM Act 2021 authorization rules
         and mathematical safety invariants (forbidding false Red Alerts if projected AQI <= 200).
 
-  # 3. Amazon S3 Bucket (Spatial Grid GeoJSON & Benchmark Proofs Cache)
-  AerisSpatialDataBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub "aeris-spatial-data-${AWS::AccountId}"
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
-      VersioningConfiguration:
-        Status: Enabled
-
-  # 4. Amazon App Runner Service (Containerized FastAPI Backend & Koopman Physics Engine)
-  AerisBackendAppRunner:
-    Type: AWS::AppRunner::Service
-    Properties:
-      ServiceName: aeris-backend-api
-      SourceConfiguration:
-        AutoDeploymentsEnabled: false
-        AuthenticationConfiguration:
-          AccessRoleArn: !GetAtt AppRunnerInstanceRole.Arn
-        ImageRepository:
-          ImageIdentifier: aeris-backend:latest
-          ImageRepositoryType: ECR
-          ImageConfiguration:
-            Port: "8000"
-            RuntimeEnvironmentVariables:
-              - Name: OPENSEARCH_ENDPOINT
-                Value: !GetAtt AerisSpatialSearchDomain.DomainEndpoint
-              - Name: CEDAR_POLICY_STORE_ID
-                Value: !GetAtt AerisCedarPolicyStore.PolicyStoreId
-
-  # IAM Execution Role for App Runner
-  AppRunnerInstanceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - build.apprunner.amazonaws.com
-                - tasks.apprunner.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: AerisResourceAccessPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:PutObject
-                  - es:ESHttpGet
-                  - es:ESHttpPost
-                  - verifiedpermissions:IsAuthorized
-                Resource: "*"
-
 Outputs:
   OpenSearchEndpoint:
     Description: "Amazon OpenSearch Geospatial Search Endpoint"
@@ -112,11 +45,3 @@ Outputs:
   CedarPolicyStoreId:
     Description: "AWS Cedar Statutory Policy Store Identifier"
     Value: !GetAtt AerisCedarPolicyStore.PolicyStoreId
-
-  SpatialDataBucketName:
-    Description: "Amazon S3 Spatial Grid & Verification Cache Bucket"
-    Value: !Ref AerisSpatialDataBucket
-
-  AppRunnerServiceUrl:
-    Description: "AERIS FastAPI Backend App Runner Service URL"
-    Value: !GetAtt AerisBackendAppRunner.ServiceUrl

@@ -255,18 +255,16 @@ AERIS is architected to run on the **AWS Open-Source On-Machine Suite**:
 ![AERIS Open-Source AWS Architecture and Cloud Governance](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/06_aws_cloud_architecture.jpg)
 *Figure 6. The AERIS AWS Cloud Architecture running completely on-machine for ₹0.00 cloud bill, featuring our live AWS Cedar policy evaluator, sub-5ms OpenSearch hotspot queries, and Strands Agents reasoning.*
 
-| Architectural Role | Open-Source AWS Tool / Framework | Function in AERIS | Local & Cloud Cost |
+| Architectural Role | Open-Source Tool / Framework | Function in AERIS | Local & Cloud Cost |
 | :--- | :--- | :--- | :--- |
-| **Serverless Execution** | AWS SAM CLI (v1.115) | Local Lambda simulation & API Gateway routing | ₹0.00 / $0.00 |
-| **Cloud Service Mock** | LocalStack (v3.4) | Offline DynamoDB, S3, and SNS emulation | ₹0.00 / $0.00 |
 | **Policy Authorization** | AWS Cedar (v3.1) | Declarative statutory CAQM / GRAP-IV enforcement | ₹0.00 / $0.00 |
 | **Spatial Search Engine** | Amazon OpenSearch (v2.11) | Sub-3ms geo-bounding box pollution hotspot indexing | ₹0.00 / $0.00 |
-| **Agentic Reasoning** | Strands Agents SDK | Multi-agent reasoning for citizen & school advisories | ₹0.00 / $0.00 |
-| **Container Isolation** | Finch & Firecracker | MicroVM sandboxing for untrusted data parsers | ₹0.00 / $0.00 |
-| **Telemetry Storage** | S3 & CloudFront Free Tier | Static spatial grid caching and proof verification | ₹0.00 / $0.00 |
-| **TOTAL RUNTIME BILL** | **Full Local-First Suite** | **Zero credit card / zero cloud lock-in** | **₹0.00 (Zero Fee)** |
+| **Backend REST Engine** | FastAPI & Uvicorn | 72h Koopman forward rollouts & SLSQP Model Predictive Control | ₹0.00 / $0.00 |
+| **Control Room Frontend** | React & TypeScript (Vite) | Interactive 33-station Leaflet maps & dynamic QR onboarding | ₹0.00 / $0.00 |
+| **Container Runtime** | Docker Engine | Local containerization for OpenSearch & backend service isolation | ₹0.00 / $0.00 |
+| **TOTAL RUNTIME BILL** | **100% Open-Source Suite** | **Zero credit card / zero cloud lock-in** | **₹0.00 (Zero Fee)** |
 
-You can clone the repository, run `sam local start-api`, and have the entire system operational on your laptop with zero credit cards, zero active cloud subscriptions, and zero surprise bills.
+You can clone the repository, run `docker-compose up`, and have the entire system operational on your laptop with zero credit cards, zero active cloud subscriptions, and zero surprise bills.
 
 ---
 
