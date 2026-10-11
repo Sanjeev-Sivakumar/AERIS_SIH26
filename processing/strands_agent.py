@@ -33,12 +33,13 @@ class StrandsAirshedAgent:
         if not self.api_key:
             return None
         
-        # Working models for this API key
+        # High-performance production models supported on this API key
         models = [
-            "models/gemma-4-26b-a4b-it",
-            "models/gemma-4-31b-it",
-            "models/antigravity-preview-latest",
-            "models/deep-research-preview-04-2026"
+            "models/gemini-flash-lite-latest",
+            "models/gemini-3.1-flash-lite",
+            "models/gemini-3.5-flash-lite",
+            "models/gemini-flash-latest",
+            "models/gemini-3.5-flash"
         ]
         
         payload = {
@@ -51,7 +52,7 @@ class StrandsAirshedAgent:
             ],
             "generationConfig": {
                 "temperature": 0.2,
-                "maxOutputTokens": 1000,
+                "maxOutputTokens": 600,
                 "topP": 0.95
             }
         }
@@ -86,25 +87,10 @@ class StrandsAirshedAgent:
         if not raw_text:
             return ""
         import re
-        # Look for double newline separated paragraphs
-        paragraphs = [p.strip() for p in raw_text.split("\n\n") if p.strip()]
-        for p in reversed(paragraphs):
-            # If paragraph doesn't start with bullet or Draft or Persona
-            if not p.startswith("*") and not p.startswith("#") and not p.lower().startswith("draft") and not p.lower().startswith("persona") and not p.lower().startswith("subject") and not p.lower().startswith("condition"):
-                clean = p.replace('"', '').strip()
-                if len(clean) > 20:
-                    return clean
-        # Fallback to line scanning
-        lines = [l.strip() for l in raw_text.splitlines() if l.strip()]
-        clean_lines = [
-            l for l in lines 
-            if not l.startswith("*") and not l.startswith("#") and not l.startswith("-") 
-            and not l.lower().startswith("draft") and not l.lower().startswith("thinking") 
-            and not l.lower().startswith("subject") and not l.lower().startswith("user role") 
-            and not l.lower().startswith("persona") and not l.lower().startswith("condition")
-        ]
-        if clean_lines:
-            return " ".join(clean_lines[-3:]) if len(clean_lines) > 3 else " ".join(clean_lines)
+        # Remove any internal thinking blocks if generated
+        cleaned = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL).strip()
+        if cleaned:
+            return cleaned
         return raw_text.strip()
 
     def ask(self, query: str, user_role: str = "citizen", ward_id: str = "anand_vihar") -> Dict[str, Any]:
