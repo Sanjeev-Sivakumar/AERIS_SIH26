@@ -24,7 +24,7 @@ AERIS is an open-source atmospheric decision intelligence platform. It tracks 33
 
 Best of all: the entire architecture runs on open-source AWS tooling on a local machine for **₹0.00 / $0.00 in cloud bills**.
 
-![AERIS Live Monitoring Grid across Delhi NCR](docs/images/01_delhi_airshed_heatmap.jpg)
+![AERIS Live Monitoring Grid across Delhi NCR](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/01_delhi_airshed_heatmap.jpg)
 *Figure 1. The AERIS live control plane monitoring 33 continuous ground stations across Delhi NCR, showing localized PM2.5 concentrations, Planetary Boundary Layer height, and thermal inversion capping.*
 
 Here is what we learned building it, the three times real atmospheric physics proved our models wrong, and why AWS Cedar, OpenSearch, and Strands Agents SDK turned out to be the exact toolkit we needed.
@@ -45,7 +45,7 @@ After sunset, rapid radiative cooling chills the ground faster than the air abov
 
 When that happens, the city's breathing room shrinks by more than **80%**. The exact same volume of tailpipe emissions and incoming agricultural smoke is suddenly compressed into a suffocating 200-meter ceiling. Particulate concentrations surge by 400% without a single extra vehicle starting its engine.
 
-![Coupled Feedback and Nocturnal Thermal Inversion Collapse Engine](docs/images/03_inversion_lid_feedback.jpg)
+![Coupled Feedback and Nocturnal Thermal Inversion Collapse Engine](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/03_inversion_lid_feedback.jpg)
 *Figure 2. Our atmospheric action window tracking the nocturnal inversion lid closure in real time. Action efficiency collapses by 75% once the thermal lid seals, turning early afternoon interventions into the only effective defense.*
 
 Our first prototype was just an aggregation dashboard with Leaflet pins and station graphs. Talking to environmental researchers and school principals, we realized that showing real-time numbers is useless if you don't model the lid. A sensor reading of 350 at 8:00 AM is not an early warning—it is history.
@@ -72,7 +72,7 @@ The core insight is straightforward: while atmospheric fluid dynamics is non-lin
 
 Instead of running slow iterative differential equations across a 900-cell grid, a 72-hour forecast becomes a fast matrix-vector dot product. On an ordinary laptop, our 72-hour forward rollout executes in **8.4 milliseconds**.
 
-![72-Hour Koopman Operator Dynamical Rollouts with Analytical Lyapunov Bounds](docs/images/04_koopman_72h_forecast.jpg)
+![72-Hour Koopman Operator Dynamical Rollouts with Analytical Lyapunov Bounds](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/04_koopman_72h_forecast.jpg)
 *Figure 3. Real-time 72-hour forward rollouts across Delhi NCR. The light blue envelope displays our analytical Lyapunov uncertainty bounds propagating error over time, with instant parameter toggling between PM2.5, PM10, Ozone, and NO2.*
 
 To prevent our rollouts from drifting or hallucinating over 72 hours, we propagated analytical **Lyapunov uncertainty bounds** at every hourly time step. 
@@ -92,7 +92,7 @@ We designed AERIS with dedicated citizen and institutional protection workflows:
 1. **Hyper-Local School Safety Protocols:** For school administrators, AERIS calculates actionable pre-inversion lead times. If a nocturnal inversion is projected to cap Anand Vihar at AQI 388, the system issues an automated advisory 12 hours earlier, recommending the suspension of outdoor morning assemblies and detailing indoor ventilation schedules.
 2. **Dynamic Mobile Citizen Registration:** Citizens and residents can scan a local QR code on their smartphone to immediately register for hyper-local SMS and email alerts, receiving verified alerts before peak inversion hits their ward.
 
-![Hyperlocal Citizen Alerts and School Protection Protocol](docs/images/02_citizen_qr_registration.jpg)
+![Hyperlocal Citizen Alerts and School Protection Protocol](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/02_citizen_qr_registration.jpg)
 *Figure 4. Hyper-local ward safety protocols and school protection dashboard, pinpointing actionable pre-inversion lead times (+3.4 hours in Anand Vihar) and issuing dynamic outdoor activity suspensions.*
 
 ---
@@ -103,7 +103,7 @@ Most air portals just watch the disaster unfold. AERIS actively tests counterfac
 
 It simulates the crucial operational question: *What happens if municipal teams fire anti-smog mist cannons and divert heavy diesel freight at 2:00 PM while convective venting is still active, versus waiting until 8:00 PM after the inversion lid has already sealed?*
 
-![Model Predictive Control Counterfactual Intervention Analysis](docs/images/05_model_predictive_control.jpg)
+![Model Predictive Control Counterfactual Intervention Analysis](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/05_model_predictive_control.jpg)
 *Figure 5. Counterfactual evaluation: Baseline without intervention (red curve, peak 207.3 µg/m³) versus the optimized AERIS intervention plan (green curve, peak 148.0 µg/m³), achieving a 34% peak particulate reduction.*
 
 The physics proved decisive:
@@ -239,7 +239,7 @@ A core tenet of our design was **accessibility and zero cloud lock-in**. Many st
 
 AERIS is architected to run on the **AWS Open-Source On-Machine Suite**:
 
-![AERIS Open-Source AWS Architecture and Cloud Governance](docs/images/06_aws_cloud_architecture.jpg)
+![AERIS Open-Source AWS Architecture and Cloud Governance](https://raw.githubusercontent.com/Sanjeev-Sivakumar/Environmental-hacks/main/docs/images/06_aws_cloud_architecture.jpg)
 *Figure 6. The AERIS AWS Cloud Architecture running completely on-machine for ₹0.00 cloud bill, featuring our live AWS Cedar policy evaluator, sub-5ms OpenSearch hotspot queries, and Strands Agents reasoning.*
 
 * **Serverless Definition:** AWS SAM CLI (v1.115) — ₹0.00 / $0.00
