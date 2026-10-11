@@ -1227,7 +1227,8 @@ def serve_mobile_registration():
 # -----------------------------------------------------------------------------
 dist_dir = Path(__file__).resolve().parent.parent / "dashboard" / "dist"
 if dist_dir.exists() and (dist_dir / "index.html").exists():
-    app.mount("/assets", StaticFiles(directory=str(dist_dir / "assets")), name="assets")
+    if (dist_dir / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=str(dist_dir / "assets")), name="assets")
 
     @app.get("/{full_path:path}", include_in_schema=False)
     def serve_spa(full_path: str):

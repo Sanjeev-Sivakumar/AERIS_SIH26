@@ -4,7 +4,7 @@ Implements autonomous agentic workflows for natural-language citizen advisory,
 school safety reasoning, and municipal decision-support using Strands Agent patterns.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import logging
 from datetime import datetime, timezone
 
