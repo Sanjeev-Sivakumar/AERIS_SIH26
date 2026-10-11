@@ -2,7 +2,18 @@
 set -e
 
 echo "=== AERIS 1-Click AWS Deployment (Free Tier) ==="
-echo "Updating packages..."
+
+# 1. Set up 2GB swap to guarantee zero OOM crashes on 1GB RAM t3.micro
+if [ ! -f /swapfile ]; then
+    echo "Configuring 2GB swap space for t3.micro RAM stability..."
+    sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+fi
+
+echo "Updating system packages..."
 sudo apt-get update -y
 sudo apt-get install -y python3-pip python3-venv git nodejs npm nginx curl
 
@@ -31,7 +42,7 @@ sleep 3
 
 echo "Building React frontend..."
 cd "$WORKDIR/dashboard"
-npm install
+npm install --no-audit --no-fund
 npm run build
 
 echo "Configuring Nginx web server..."
@@ -66,7 +77,7 @@ sudo systemctl restart nginx
 
 PUBLIC_IP=$(curl -s ifconfig.me || curl -s icanhazip.com || echo "your-server-ip")
 echo "=========================================================="
-echo "AERIS is now LIVE and fully deployed!"
+echo "🎉 AERIS is now LIVE and fully deployed!"
 echo "Visit your site at: http://$PUBLIC_IP"
 echo "API status: http://$PUBLIC_IP/api/state"
 echo "=========================================================="
