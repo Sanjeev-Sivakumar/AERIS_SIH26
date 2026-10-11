@@ -29,26 +29,43 @@ else
 fi
 
 echo "Setting up Python virtual environment..."
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-pip install uvicorn fastapi
+python3 -m venv "$WORKDIR/venv"
+"$WORKDIR/venv/bin/pip" install --upgrade pip
+"$WORKDIR/venv/bin/pip" install -r "$WORKDIR/requirements.txt"
+"$WORKDIR/venv/bin/pip" install uvicorn fastapi
 
-echo "Starting FastAPI backend in background on port 8000..."
-pkill -f "uvicorn api.server:app" || true
-nohup uvicorn api.server:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
-sleep 3
+# Set up systemd service for reliable background execution of FastAPI
+echo "Configuring systemd service for AERIS Backend..."
+cat << EOF | sudo tee /etc/systemd/system/aeris-backend.service
+[Unit]
+Description=AERIS FastAPI Backend
+After=network.target
+
+[Service]
+User=$USER
+WorkingDirectory=$WORKDIR
+Environment="PYTHONPATH=$WORKDIR"
+ExecStart=$WORKDIR/venv/bin/python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable aeris-backend
+sudo systemctl restart aeris-backend
 
 echo "Building React frontend..."
 cd "$WORKDIR/dashboard"
 npm install --no-audit --no-fund
 npm run build
 
-echo "Configuring Nginx web server..."
+echo "Configuring Nginx web server with API and Mobile reverse proxy..."
 sudo cp -r dist/* /var/www/html/
 
-# Configure Nginx reverse proxy
+# Configure Nginx reverse proxy for both /api/ and /mobile routes
 cat << 'EOF' | sudo tee /etc/nginx/sites-available/default
 server {
     listen 80 default_server;
@@ -63,7 +80,17 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
+    # Reverse proxy API requests to FastAPI
     location /api/ {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Reverse proxy Mobile dynamic QR barcode onboarding to FastAPI
+    location /mobile {
         proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -78,6 +105,7 @@ sudo systemctl restart nginx
 PUBLIC_IP=$(curl -s ifconfig.me || curl -s icanhazip.com || echo "your-server-ip")
 echo "=========================================================="
 echo "🎉 AERIS is now LIVE and fully deployed!"
-echo "Visit your site at: http://$PUBLIC_IP"
+echo "Dashboard: http://$PUBLIC_IP"
+echo "Mobile QR Gateway: http://$PUBLIC_IP/mobile"
 echo "API status: http://$PUBLIC_IP/api/state"
 echo "=========================================================="
