@@ -18,6 +18,7 @@ import { QRCodeEnrollModal } from './components/alerts/QRCodeEnrollModal';
 import { InteractiveBroadcastModal } from './components/alerts/InteractiveBroadcastModal';
 import { CitizenCommunityPortal } from './components/alerts/CitizenCommunityPortal';
 import { AWSInfrastructureDrawer } from './components/cloud/AWSInfrastructureDrawer';
+import { MobileRegistrationPage } from './components/mobile/MobileRegistrationPage';
 
 import {
   NavigationPage,
@@ -46,6 +47,16 @@ import {
 } from './api';
 
 export const App: React.FC = () => {
+  // Check if route is mobile dynamic onboarding (/mobile or ?mobile=true)
+  const isMobilePortal = typeof window !== 'undefined' && (
+    window.location.pathname.startsWith('/mobile') ||
+    window.location.search.includes('mobile=true')
+  );
+
+  if (isMobilePortal) {
+    return <MobileRegistrationPage />;
+  }
+
   const [currentPage, setCurrentPage] = useState<NavigationPage>('overview');
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [currentState, setCurrentState] = useState<CurrentState | null>(null);

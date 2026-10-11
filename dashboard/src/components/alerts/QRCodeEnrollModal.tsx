@@ -63,14 +63,15 @@ export const QRCodeEnrollModal: React.FC<QRCodeEnrollModalProps> = ({
 
   const selectedWard = DELHI_WARDS.find((w) => w.id === selectedWardId) || DELHI_WARDS[0];
 
-  const localNetworkHost = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+  const protocol = typeof window !== 'undefined' && window.location.protocol ? window.location.protocol : 'http:';
+  const targetHost = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? window.location.host
-    : '192.168.1.102:8000';
-  const mobilePortalUrl = `http://${localNetworkHost}/mobile?ward=${selectedWard.id}`;
+    : (typeof window !== 'undefined' && window.location.host ? window.location.host : '192.168.1.102:8000');
+  const mobilePortalUrl = `${protocol}//${targetHost}/mobile?ward=${selectedWard.id}`;
   const whatsappPhone = '919876543210';
   const whatsappText = `START AERIS AIR ALERTS ${selectedWard.name.toUpperCase()}`;
   const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappText)}`;
-  const webPortalUrl = `http://${localNetworkHost}/mobile`;
+  const webPortalUrl = `${protocol}//${targetHost}/mobile`;
 
   const activeTargetUrl = activeTab === 'email' ? mobilePortalUrl : activeTab === 'whatsapp' ? whatsappUrl : webPortalUrl;
 

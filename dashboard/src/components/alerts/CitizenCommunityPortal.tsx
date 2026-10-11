@@ -875,7 +875,7 @@ export const CitizenCommunityPortal: React.FC<CitizenCommunityPortalProps> = ({
                     boxSizing: 'border-box'
                   }}
                 >
-                  http://192.168.1.102:8000/mobile
+                  {typeof window !== 'undefined' ? `${window.location.origin}/mobile` : 'http://localhost/mobile'}
                 </div>
               </div>
             </div>
